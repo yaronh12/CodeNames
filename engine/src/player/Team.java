@@ -3,27 +3,16 @@ package player;
 public class Team implements Agent, Guesser{
 
     final private String teamName;
-    private int teamScore;
+    private int score;
+    private Agent agent = new Player();
+    private Guesser guesser = new Player();
+    final private  int  wordToGuess;
 
     public Team(String teamName) {
         this.teamName = teamName;
         this.teamScore = 0;
     }
 
-    @Override
-    public void giveClue(String clue, int amountOfWords) {
-
-    }
-
-    @Override
-    public void makeGuess(int wordIndex) {
-
-    }
-
-    @Override
-    public void passTurn() {
-
-    }
 
     public String getTeamName() {
         return teamName;

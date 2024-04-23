@@ -1,4 +1,4 @@
-package board;
+package gameInfo;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,6 +18,12 @@ public class Data {
     private String team1name = "T1";
     private int team2cards = 8;
     private String team2name = "T2";
+
+    public int getNumOfTeam() {
+        return numOfTeam;
+    }
+
+    private int numOfTeam = 2;
 
     private Set<String> wordsSet = new HashSet<>() {{
         add("encapsulation");

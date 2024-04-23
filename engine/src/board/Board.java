@@ -1,5 +1,6 @@
 package board;
 
+import gameInfo.Data;
 import word_card.WordCard;
 
 import java.util.*;
