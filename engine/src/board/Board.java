@@ -1,7 +1,5 @@
 package board;
 
-import java.util.Set;
-
-public class Board implements AgentBoard, GuesserBoard{
+public class Board {
 
 }
