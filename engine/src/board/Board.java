@@ -21,8 +21,8 @@ public class Board {
      * - Assigns all black cards as special game-ending cards.
      * - Finally, shuffles the whole set of cards for random board layout.
      */
-        public Board() {
-            Data data = new Data();
+        public Board(Data data) {
+           // Data data = new Data();
 
             // Set board dimensions based on rows and columns from Data
             this.boardDimensions.add(0, data.getRows());

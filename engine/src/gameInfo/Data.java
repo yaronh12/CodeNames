@@ -13,6 +13,7 @@ public class Data {
     private int rows = 5;
     private int cols = 5;
 
+
     private int team1cards = 9;
 
     private String team1name = "T1";
@@ -25,7 +26,7 @@ public class Data {
 
     private int numOfTeam = 2;
 
-    private Set<String> wordsSet = new HashSet<>() {{
+    private Set<String> wordsSet = new HashSet<String>() {{
         add("encapsulation");
         add("german");
         add("poland");
@@ -105,7 +106,7 @@ public class Data {
         add("rotor");
         add("tonight");
     }};
-    private Set<String> blackWordsSet = new HashSet<>() {{
+    private Set<String> blackWordsSet = new HashSet<String>() {{
         add("mouse");
         add("door");
         add("data");

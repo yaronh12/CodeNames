@@ -1,6 +1,6 @@
 package player;
 
-public class Team implements Agent, Guesser{
+public class Team{
 
     final private String teamName;
     private int score;
@@ -8,9 +8,10 @@ public class Team implements Agent, Guesser{
     private Guesser guesser = new Player();
     final private  int  wordToGuess;
 
-    public Team(String teamName) {
+    public Team(String teamName, int wordToGuess) {
         this.teamName = teamName;
-        this.teamScore = 0;
+        this.score=0;
+        this.wordToGuess = wordToGuess;
     }
 
 
@@ -18,26 +19,7 @@ public class Team implements Agent, Guesser{
         return teamName;
     }
 
-    public void setTeamScore(int teamScore) {
-        this.teamScore = teamScore;
-    }
 
-    public int getTeamScore() {
-        return teamScore;
-    }
 
-    @Override
-    public String whichTeam() {
-        return null;
-    }
 
-    @Override
-    public int getScore() {
-        return 0;
-    }
-
-    @Override
-    public int totalWordAmount() {
-        return 0;
-    }
 }
