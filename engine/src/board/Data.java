@@ -1,4 +1,8 @@
+package board;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Data {
@@ -15,7 +19,7 @@ public class Data {
     private int team2cards = 8;
     private String team2name = "T2";
 
-    private Set<String> wordsSet = new HashSet<String>() {{
+    private Set<String> wordsSet = new HashSet<>() {{
         add("encapsulation");
         add("german");
         add("poland");
@@ -95,7 +99,7 @@ public class Data {
         add("rotor");
         add("tonight");
     }};
-    private Set<String> blackWordsSet = new HashSet<String>() {{
+    private Set<String> blackWordsSet = new HashSet<>() {{
         add("mouse");
         add("door");
         add("data");
