@@ -13,12 +13,22 @@ public class Data {
     private int rows = 5;
     private int cols = 5;
 
+    private List<String> teamsNames = new ArrayList<String>(){{
+        add("T1");
+        add("T2");
+    }};
+    private List<Integer> howManyWordsForEachTeam = new ArrayList<Integer>(){{
+        add(9);
+        add(8);
+    }};
 
-    private int team1cards = 9;
+    public List<String> getTeamsNames(){
+        return teamsNames;
+    }
 
-    private String team1name = "T1";
-    private int team2cards = 8;
-    private String team2name = "T2";
+    public List<Integer> getHowManyWordsForEachTeam(){
+        return howManyWordsForEachTeam;
+    }
 
     public int getNumOfTeam() {
         return numOfTeam;
@@ -26,7 +36,7 @@ public class Data {
 
     private int numOfTeam = 2;
 
-    private Set<String> wordsSet = new HashSet<String>() {{
+    private List<String> wordsList = new ArrayList<String>() {{
         add("encapsulation");
         add("german");
         add("poland");
@@ -106,7 +116,7 @@ public class Data {
         add("rotor");
         add("tonight");
     }};
-    private Set<String> blackWordsSet = new HashSet<String>() {{
+    private List<String> blackWordsList = new ArrayList<String>() {{
         add("mouse");
         add("door");
         add("data");
@@ -192,27 +202,13 @@ public class Data {
         return cols;
     }
 
-    public int getTeam1cards() {
-        return team1cards;
+
+
+    public List<String> getWordsList() {
+        return wordsList;
     }
 
-    public String getTeam1name() {
-        return team1name;
-    }
-
-    public int getTeam2cards() {
-        return team2cards;
-    }
-
-    public String getTeam2name() {
-        return team2name;
-    }
-
-    public Set<String> getWordsSet() {
-        return wordsSet;
-    }
-
-    public Set<String> getBlackWordsSet() {
-        return blackWordsSet;
+    public List<String> getBlackWordsList() {
+        return blackWordsList;
     }
 }
