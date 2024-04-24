@@ -14,6 +14,20 @@ public interface Engine {
     int getBoardRows();
     int getBoardCols();
 
+    List<Team> getTeams();
 
-    void startGame();
+    List<Card> getBoardState();
+  /*  void startGame();
+    boolean makeGuess(String guess, String team);
+    boolean isGameOver();
+    void endGame();*/
+
+    String getCurrentTeamName();
+
+    int getCurrentTeamScore();
+
+    int getCurrentTeamTotalWords();
+
+
+
 }
