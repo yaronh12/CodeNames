@@ -3,12 +3,14 @@ import engine.EngineImpl;
 import team.Team;
 import components.*;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class GameUI {
     private Engine game = new EngineImpl();
 
     public void printGameData(){
+        System.out.println("--------------------------");
         System.out.println("Game Details:");
         System.out.println("There are " + game.getRegularWords().size() + " words to choose from.");
         System.out.println("There are " + game.getBlackWords().size() + " black words to choose from.");
@@ -16,6 +18,8 @@ public class GameUI {
         for(Team team: game.getTeams()){
             System.out.println(team);
         }
+        System.out.println("--------------------------");
+
 
     }
     public void printCards(){
@@ -53,7 +57,28 @@ public class GameUI {
         }
     }
 
-    public void startGame(){
+    public void printAgentBoard(){
+        int rows = game.getBoardRows();
+        int cols = game.getBoardCols();
+        List<Card> cards = game.getBoardState();
+        int cardIndex = 0;
+        for (int i = 0; i < rows; i++) {
 
+            for (int j = 0; j < cols; j++) {
+                //System.out.print("   ");
+                //System.out.print((cardIndex+1) +". "+ cards.get(cardIndex).getWord());
+                if(cardIndex+1<10)
+                    System.out.print(" ");
+                System.out.printf("%d. %s", (cardIndex+1), cards.get(cardIndex).getWord());
+                cardIndex++;
+            }
+            System.out.println("");
+
+        }
+    }
+
+    public void startGame(){
+        game = new EngineImpl();
+        printAgentBoard();
     }
 }
