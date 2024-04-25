@@ -28,18 +28,14 @@ public class Board {
     private void chooseRegularWordForTeams(List<String> regularWords, List<Team> teams){
         for (Team team: teams) {
             for ( int i = 0; i < team.getCardAmount(); i++) {
-                Card tmpCard = new Card(regularWords.get(i), team.getTeamName(), false);
-                cards.add(tmpCard);
-                regularWords.remove(i);
+                cards.add(new Card(regularWords.remove(0), team.getTeamName(), false));
             }
         }
     }
 
     private void chooseRegularWord(List<String> regularWords, int numOfWordsLeft){
         for ( int i = 0; i < numOfWordsLeft; i++) {
-            Card tmpCard = new Card(regularWords.get(i), "NONE", false);
-            cards.add(tmpCard);
-            regularWords.remove(i);
+            cards.add(new Card(regularWords.remove(0), "NONE", false));
         }
     }
 
@@ -51,14 +47,13 @@ public class Board {
 
         int count = 0;
         while (count < blackWordsAmountForGame){
-            if(regularWord.contains(BlackWordWithoutDuplicates.get(0))){
-                continue;
+            if(!regularWord.contains(BlackWordWithoutDuplicates.get(0))){
+                cards.add(new Card(BlackWordWithoutDuplicates.remove(0), "BLACK", false));
+                count++;
             }
-            Card tmpCard = new Card(BlackWordWithoutDuplicates.get(0), "BLACK", false);
-            cards.add(tmpCard);
-            BlackWordWithoutDuplicates.remove(0);
-            count++;
-
+            else{
+                BlackWordWithoutDuplicates.remove(0);
+            }
         }
     }
 

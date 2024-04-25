@@ -63,17 +63,14 @@ public class GameUI {
         List<Card> cards = game.getBoardState();
         int cardIndex = 0;
         for (int i = 0; i < rows; i++) {
-
+            System.out.print("|  ");
             for (int j = 0; j < cols; j++) {
-                //System.out.print("   ");
-                //System.out.print((cardIndex+1) +". "+ cards.get(cardIndex).getWord());
                 if(cardIndex+1<10)
                     System.out.print(" ");
-                System.out.printf("%d. %s", (cardIndex+1), cards.get(cardIndex).getWord());
+                System.out.printf("%d. %-20s", (cardIndex+1), cards.get(cardIndex).getWord());
                 cardIndex++;
             }
-            System.out.println("");
-
+            System.out.println("|");
         }
     }
 
