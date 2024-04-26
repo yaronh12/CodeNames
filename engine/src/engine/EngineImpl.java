@@ -1,6 +1,8 @@
 package engine;
 
 import java.util.List;
+
+import team.Guess;
 import team.Team;
 import components.*;
 
@@ -52,6 +54,15 @@ public class EngineImpl implements Engine{
     @Override
     public List<Card> getBoardState(){
         return this.activeGame.getBoard().getCards();
+    }
+
+    @Override
+    public void passTurn(){
+       this.activeGame.passTurn();
+    }
+
+    public Guess makeGuess(String guess){
+       return this.activeGame.makeGuess(guess);
     }
 
 

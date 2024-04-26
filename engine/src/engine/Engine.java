@@ -2,7 +2,7 @@ package engine;
 
 import java.util.List;
 import components.*;
-import team.Team;
+import team.*;
 //menu:
 //1. load xml file
 //after the file got loaded:
@@ -33,18 +33,12 @@ public interface Engine {
 
     List<Team> getTeams();
 
+
+    void passTurn();
+
     List<Card> getBoardState();
 
-    //this function gets the users guess
-    //if the guess isn't on the board the func returns null
-    //if the guess is a word on the board, it returns the word Card class
-    Card makeGuess(String guess);
-
-    boolean isGuessBlack(Card guess);
-
-    boolean isGuessCorrect(Card guess, Team currentTeam);
-
-    boolean isGuessForOtherTeam(Card guess);
+    public Guess makeGuess(String guess);
 
   /*  void startGame();
     boolean isGameOver();

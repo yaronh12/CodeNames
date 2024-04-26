@@ -31,8 +31,8 @@ public class Card {
         return isFound;
     }
 
-    public void setFound(boolean found) {
-        isFound = found;
+    public void setFound() {
+        isFound = !isFound;
     }
 
     @Override

@@ -35,7 +35,7 @@ public class Board {
 
     private void chooseRegularWord(List<String> regularWords, int numOfWordsLeft){
         for ( int i = 0; i < numOfWordsLeft; i++) {
-            cards.add(new Card(regularWords.remove(0), "NONE", false));
+            cards.add(new Card(regularWords.remove(0), "", false));
         }
     }
 
