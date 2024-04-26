@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class GameUI {
+
+    //1. wrap it up under packege
     private Engine game = new EngineImpl();
 
     public void printGameData(){
