@@ -1,4 +1,6 @@
+package main;
 
+import ui.GameUI;
 
 public class Main {
 
