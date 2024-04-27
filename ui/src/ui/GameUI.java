@@ -43,14 +43,15 @@ public class GameUI {
         game = new EngineImpl();
     }
 
+
     public void mainMenu(){
         Scanner in = new Scanner(System.in);
         System.out.println("1. Show game details");
         System.out.println("2. Start new game");
         System.out.println("3. Exit system");
         System.out.println("Please enter number:");
-        int num = in.nextInt();
-        switch(num){
+        int userChoice = in.nextInt();
+        switch(userChoice){
             case 1:
                 printGameData();
                 break;
@@ -81,8 +82,6 @@ public class GameUI {
     }
 
     public void startGame(){
-        //game = new EngineImpl();
-        //printAgentBoard();
         this.isGameOver = false;
         while (!this.isGameOver){
             for (Team team: game.getTeams()){
@@ -97,52 +96,50 @@ public class GameUI {
         //******* print agents board ********
 
         int amountOfWordsToGuess;
-        String wordToGuess;
-        String wordToCheck;
+        String clue;
+        String guessWord;
         Guess guess;
         Scanner in = new Scanner(System.in);
         System.out.println(this.game.getCurrentTeamName() + "'s agent, please give a clue. to confirm press Enter.");
         System.out.println("Enter the clue: ");
-        wordToGuess = in.nextLine();
+        clue = in.nextLine();
         System.out.println("Enter how many guesses: ");
         amountOfWordsToGuess = in.nextInt();
         in.nextLine();
         //******* print guessers board **********
         this.printAgentBoard();
-        System.out.println("Hello "+this.game.getCurrentTeamName() + "'s guessers! your clue is "+wordToGuess+ "and you have "+amountOfWordsToGuess+" words to guess.");
-        Integer guesserTurnIndex=0;
+        System.out.println("Hello "+this.game.getCurrentTeamName() + "'s guessers! your clue is "+clue+ "and you have "+amountOfWordsToGuess+" words to guess.");
+        int guesserTurnIndex=0;
         boolean correctGuess = true;
         while (guesserTurnIndex < amountOfWordsToGuess && correctGuess) {
             System.out.println("guess #"+(guesserTurnIndex+1)+": ");
-            wordToCheck = in.nextLine();
-            correctGuess = this.giveGuessResponse(this.game.makeGuess(wordToCheck), guesserTurnIndex);
-
+            guessWord = in.nextLine();
+            correctGuess = this.giveGuessResponse(this.game.makeGuess(guessWord));
         }
 
         return correctGuess;
     }
 
-    private boolean giveGuessResponse(Guess guess, Integer guesserTurnIndex){
-        if(guess.isGuessCorrect()){
-            System.out.println("Correct!");
-            guesserTurnIndex += 1;
+    private boolean giveGuessResponse(Guess guess){
+        if(!guess.isWordOnBoard()){
+            System.out.println("word is not on board. please make another guess.");
+            return true;
+        }
+        if(guess.isWordAlreadyFound()){
+            System.out.println("this word has already discovered! please make another guess.");
             return true;
         }
         if(guess.isGuessedForOtherTeam()){
             System.out.println("Wrong! this word belongs to "+guess.getTeamNameOnCard());
             return false;
         }
-        if(!guess.isWordOnBoard()){
-            System.out.println("word is not on board. please make another guess.");
+        if(guess.isGuessCorrect()){
+            System.out.println("Correct!");
             return true;
         }
         if(guess.isGuessedWordBlack()){
             System.out.println("Black word! you lose!");
             return false;
-        }
-        if(guess.isWordAlreadyFound()){
-            System.out.println("this word has already discovered! please make another guess.");
-            return true;
         }
         if(guess.isGuessedWordWithoutTeam()){
             System.out.println("Wrong! this word belongs to no team.");
