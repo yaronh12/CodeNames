@@ -38,17 +38,16 @@ public interface Engine {
 
     List<Card> getBoardState();
 
-    public Guess makeGuess(String guess);
+    public Guess makeGuess(int guess);
 
   /*  void startGame();
     boolean isGameOver();
     void endGame();*/
 
-    String getCurrentTeamName();
+    Team getCurrentTeam();
 
-    int getCurrentTeamScore();
-
-    int getCurrentTeamTotalWords();
+    Team getWinningTeam();
+    boolean isGameOver(Guess guess);
 
 
 

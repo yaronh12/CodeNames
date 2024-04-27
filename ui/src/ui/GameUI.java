@@ -14,6 +14,8 @@ public class GameUI {
     //1. wrap it up under packege
     private Engine game;
     private boolean isGameOver;
+
+    private int guesserTurnIndex; //ask aviad for better solution
     public void printGameData(){
         System.out.println("--------------------------");
         System.out.println("Game Details:");
@@ -74,33 +76,35 @@ public class GameUI {
             for (int j = 0; j < cols; j++) {
                 if(cardIndex+1<10)
                     System.out.print(" ");
-                System.out.printf("%d. %-20s", (cardIndex+1), cards.get(cardIndex).getWord());
+                System.out.printf("%d. %s [ %s , %b]%-20s", (cardIndex+1), cards.get(cardIndex).getWord(), cards.get(cardIndex).getTeamName(), cards.get(cardIndex).isFound(), " ");
                 cardIndex++;
             }
             System.out.println("|");
         }
     }
 
+    
+
     public void startGame(){
         this.isGameOver = false;
         while (!this.isGameOver){
-            for (Team team: game.getTeams()){
-                this.isGameOver = playTeamTurn(team);
-                this.game.passTurn();
-            }
+            this.isGameOver = playTeamTurn();
+            this.game.passTurn();
         }
+        System.out.println("The winning team is "+this.game.getWinningTeam().getTeamName()+"!!!");
     }
 
-    private boolean playTeamTurn(Team currentTeam){
+    private boolean playTeamTurn(){
         this.printAgentBoard();
-        //******* print agents board ********
 
+        System.out.println(this.game.getCurrentTeam().getTeamName()+"'s Turn!");
+        System.out.println("Your score is "+this.game.getCurrentTeam().getScore() + " / " + this.game.getCurrentTeam().getCardAmount());
         int amountOfWordsToGuess;
         String clue;
         int guessIndex;
         Guess guess;
         Scanner in = new Scanner(System.in);
-        System.out.println(this.game.getCurrentTeamName() + "'s agent, please give a clue. to confirm press Enter.");
+        System.out.println(this.game.getCurrentTeam().getTeamName() + "'s agent, please give a clue. to confirm press Enter.");
         System.out.println("Enter the clue: ");
         clue = in.nextLine();
         System.out.println("Enter how many guesses: ");
@@ -108,19 +112,27 @@ public class GameUI {
         in.nextLine();
         //******* print guessers board **********
         this.printAgentBoard();
-        System.out.println("Hello "+this.game.getCurrentTeamName() + "'s guessers! your clue is "+clue+ "and you have "+amountOfWordsToGuess+" words to guess.");
-        int guesserTurnIndex=0;
+        System.out.println("Hello "+this.game.getCurrentTeam().getTeamName() + "'s guessers! your clue is "+clue+ "and you have "+amountOfWordsToGuess+" words to guess.");
+        System.out.println("if you want to pass this turn, enter 0.");
+        this.guesserTurnIndex=0;
         boolean correctGuess = true;
         while (guesserTurnIndex < amountOfWordsToGuess && correctGuess) {
             System.out.println("guess #"+(guesserTurnIndex+1)+": ");
-            guessWord = in.nextLine();
-            correctGuess = this.giveGuessResponse(this.game.makeGuess(guessWord));
+            guessIndex = in.nextInt();
+            guess = this.game.makeGuess(guessIndex-1);
+            correctGuess = this.giveGuessResponse(guess);
+            if(this.game.isGameOver(guess))
+                return true;
         }
-
-        return correctGuess;
+        System.out.println("Your updated score is: "+this.game.getCurrentTeam().getScore() + " / " + this.game.getCurrentTeam().getCardAmount());
+        return false;
     }
 
     private boolean giveGuessResponse(Guess guess){
+        if(guess.isTurnPassed()){
+            System.out.println("Turn passed to the next team.");
+            return false;
+        }
         if(!guess.isWordOnBoard()){
             System.out.println("word is not on board. please make another guess.");
             return true;
@@ -135,6 +147,7 @@ public class GameUI {
         }
         if(guess.isGuessCorrect()){
             System.out.println("Correct!");
+            this.guesserTurnIndex++;
             return true;
         }
         if(guess.isGuessedWordBlack()){

@@ -40,17 +40,10 @@ public class EngineImpl implements Engine{
         return this.activeGame.getTeams();
     }
     @Override
-    public String getCurrentTeamName(){
-       return this.activeGame.getTeams().get(this.activeGame.getCurrentTeamIndex()).getTeamName();
+    public Team getCurrentTeam(){
+       return this.activeGame.getTeams().get(this.activeGame.getCurrentTeamIndex());
     }
-    @Override
-    public int getCurrentTeamScore(){
-        return this.activeGame.getTeams().get(this.activeGame.getCurrentTeamIndex()).getScore();
-    }
-    @Override
-    public int getCurrentTeamTotalWords(){
-        return this.activeGame.getTeams().get(this.activeGame.getCurrentTeamIndex()).getCardAmount();
-    }
+
     @Override
     public List<Card> getBoardState(){
         return this.activeGame.getBoard().getCards();
@@ -61,8 +54,26 @@ public class EngineImpl implements Engine{
        this.activeGame.passTurn();
     }
 
-    public Guess makeGuess(String guess){
+    public Guess makeGuess(int guess){
        return this.activeGame.makeGuess(guess);
+    }
+
+    public boolean isGameOver(Guess guess){
+        if(guess.isGuessedWordBlack())
+            return true;
+
+        for(Team team: this.activeGame.getTeams()){
+            if(team.getCardAmount() == team.getScore()){
+                this.activeGame.setWinningTeam(team);
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public Team getWinningTeam(){
+       return this.activeGame.getWinningTeam();
     }
 
 

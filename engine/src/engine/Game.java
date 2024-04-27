@@ -10,7 +10,7 @@ public class Game {
     private List<Team> teams;
     private int currentTeamIndex;
     private Board board;
-
+    private Team winningTeam;
 
     public Game(List<String> teamNames, List<Integer> teamCardNumber, List<String> regularWords, List<String> blackWords,
                 int regularWordsAmount, int blackWordsAmount, int boardRows, int boardCol){
@@ -43,31 +43,14 @@ public class Game {
         return this.board;
     }
 
-    /*
-    public boolean makeGuess(String guess){
-        Card cardGuess = this.getGuessCard(guess);
-        if(cardGuess == null) //guess word doesn't in board
-            return false;
-        cardGuess.setFound();
-
-        if(this.isGuessForOtherTeam(cardGuess)){ //bad guess for other team
-            this.getTeamByName(cardGuess.getTeamName()).addScore();
-            return false;
-        }
-        if(this.isGuessBlack(cardGuess)) // bad guess, black card
-            return false;
-
-        if(this.isGuessCorrect(cardGuess)) // correct guess
-        {
-            this.teams.get(this.currentTeamIndex).addScore();
-            return true;
-        }
-
-        return false; // bad guess, no team word
-
+    public Team getWinningTeam(){
+        return this.winningTeam;
     }
 
-     */
+    public void setWinningTeam(Team team){
+        this.winningTeam = team;
+    }
+
 
     /**
      * Analyzes a player's guess and updates game state based on the guess.
