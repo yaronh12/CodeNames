@@ -71,22 +71,33 @@ public class GameUI {
         int cols = game.getBoardCols();
         List<Card> cards = game.getBoardState();
         int cardIndex = 0;
+        String cardsDetails="";
+        String isFoundSign;
         for (int i = 0; i < rows; i++) {
             System.out.print("|  ");
+            System.out.println(cardsDetails);
+            cardsDetails="";
             for (int j = 0; j < cols; j++) {
                 if(cardIndex+1<10)
                     System.out.print(" ");
-                System.out.printf("%d. %s [ %s , %b]%-20s", (cardIndex+1), cards.get(cardIndex).getWord(), cards.get(cardIndex).getTeamName(), cards.get(cardIndex).isFound(), " ");
+                //System.out.printf("%d. %s [ %s , %b]%-20s", (cardIndex+1), cards.get(cardIndex).getWord(), cards.get(cardIndex).getTeamName(), cards.get(cardIndex).isFound(), " ");
+                System.out.printf("%-20s", cards.get(cardIndex).getWord());
+                isFoundSign = cards.get(cardIndex).isFound() ? "V" : "X";
+                cardsDetails += " ["+(cardIndex+1)+"] "+isFoundSign+" ("+cards.get(cardIndex).getTeamName()+")           ";
                 cardIndex++;
             }
             System.out.println("|");
+
         }
     }
 
-    
+
+
+
 
     public void startGame(){
         this.isGameOver = false;
+
         while (!this.isGameOver){
             this.isGameOver = playTeamTurn();
             this.game.passTurn();
