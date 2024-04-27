@@ -78,11 +78,19 @@ public class Game {
      * @return A {@link Guess} object containing details about the outcome of the guess including
      * whether the word was on the board, which team's word was guessed, and whether it was correct or not.
      */
-    public Guess makeGuess(String guess) {
+    public Guess makeGuess(int guess) {
         Guess guessInfo = new Guess();
 
         // Retrieve the card that matches the guessed word.
         Card cardGuess = this.getGuessCard(guess);
+
+        // Check if the player decides to pass their turn
+        if (guess == -1) {
+            guessInfo.setTurnPassed(true);// Set that the turn was passed if guess is -1
+            return guessInfo;
+        } else {
+            guessInfo.setTurnPassed(false); // Set that the turn was not passed otherwise
+        }
 
         // Check if the guessed word is on the board.
         if (cardGuess == null) {
@@ -130,12 +138,11 @@ public class Game {
     }
 
 
-    private Card getGuessCard(String guess){
-        for(Card card: this.board.getCards()){
-            if(card.getWord().equals(guess))
-                return card;
-        }
-        return null;
+    private Card getGuessCard(int guess){
+        if (guess < 0 || guess >= board.getCards().size())
+            return null;
+        else
+            return this.board.getCards().get(guess);
     }
 
     private boolean isGuessBlack(Card guess){

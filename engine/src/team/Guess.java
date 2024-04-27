@@ -13,10 +13,20 @@ public class Guess {
 
     private boolean isWordAlreadyFound;
 
+    private boolean isTurnPassed;
+
     private String teamNameOnCard;
 
     public String getTeamNameOnCard() {
         return teamNameOnCard;
+    }
+
+    public boolean isTurnPassed() {
+        return isTurnPassed;
+    }
+
+    public void setTurnPassed(boolean turnPassed) {
+        isTurnPassed = turnPassed;
     }
 
     public void setTeamNameOnCard(String teamNameOnCard) {

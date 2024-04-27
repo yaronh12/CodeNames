@@ -97,7 +97,7 @@ public class GameUI {
 
         int amountOfWordsToGuess;
         String clue;
-        String guessWord;
+        int guessIndex;
         Guess guess;
         Scanner in = new Scanner(System.in);
         System.out.println(this.game.getCurrentTeamName() + "'s agent, please give a clue. to confirm press Enter.");
