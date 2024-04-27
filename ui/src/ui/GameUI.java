@@ -160,7 +160,28 @@ public class GameUI {
         }
         return true;
     }
-}
 
+    public void printCard(Card card, int index){
+        String word = card.getWord();
+        String wordFound = card.isFound() ? "V" : "X";
+        String formatLine;
+
+        // Check if the card is associated with a team
+        if (!card.getTeamName().isEmpty()) {
+            formatLine = "[" + index + "]" + " " + wordFound +  " (" + card.getTeamName() + ")";
+        } else {
+            formatLine = "[" + index + "]" + " " + wordFound;
+        }
+
+        // Calculate padding needed to center the word above the formatLine
+        int totalLength = formatLine.length();
+        int wordLength = word.length();
+        int leadingSpaces = (totalLength - wordLength) / 2;  // Calculate leading spaces
+
+        // Print the word with leading spaces to center it
+        System.out.println(String.format("%" + (leadingSpaces + wordLength) + "s", word));
+        System.out.println(formatLine);
+    }
+}
 
 
