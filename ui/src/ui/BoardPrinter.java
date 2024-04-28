@@ -31,25 +31,19 @@ public class BoardPrinter {
     }
 
 
+
     // Display board with role-based output and ensure word is printed above the format line
     public static void displayBoard(List<Card> cards, int rows, int cols, Role role) {
         int index = 0;
         int[] maxWidths = new int[cols]; // Array to hold the maximum width needed for each column
-
         List<CardToString> formattedCards = new ArrayList<>();
-        for (int i = 0; i < cards.size(); i++) {
-            formattedCards.add(printCard(cards.get(i), i + 1, role));
-        }
+
+        formattedCards = formatCards(cards, role);
+
         // First pass: calculate the maximum width needed for each column
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (index < formattedCards.size()) {
-                    CardToString card = formattedCards.get(index++);
-                    int maxCardWidth = Math.max(card.word.length(), card.formatLine.length());
-                    maxWidths[j] = Math.max(maxWidths[j], maxCardWidth + 4); // Add 4 for padding
-                }
-            }
-        }
+
+        maxWidths = calculateMaxWidths(formattedCards, rows, cols);
+
 
         index = 0; // Reset index for the second pass
         // Second pass: print each row with proper spacing
@@ -83,5 +77,27 @@ public class BoardPrinter {
         paddedString = String.format("%-" + width + "s", paddedString);
         return paddedString;
     }
+
+    private static List<CardToString> formatCards(List<Card> cards, Role role) {
+        List<CardToString> formattedCards = new ArrayList<>();
+        for (int i = 0; i < cards.size(); i++) {
+            formattedCards.add(printCard(cards.get(i), i + 1, role));
+        }
+        return formattedCards;
+    }
+
+    private static int[] calculateMaxWidths(List<CardToString> formattedCards, int rows, int cols) {
+        int index = 0;
+        int[] maxWidths = new int[cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols && index < formattedCards.size(); j++) {
+                CardToString card = formattedCards.get(index++);
+                int maxCardWidth = Math.max(card.word.length(), card.formatLine.length());
+                maxWidths[j] = Math.max(maxWidths[j], maxCardWidth + 4);  // Add 4 for padding
+            }
+        }
+        return maxWidths;
+    }
+
 }
 

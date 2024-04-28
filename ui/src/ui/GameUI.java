@@ -74,23 +74,24 @@ public class GameUI {
         int cols = game.getBoardCols();
         List<Card> cards = game.getBoardState();
         int cardIndex = 0;
-        String cardsDetails="";
+        String[] cardsDetails = new String[cols];
         String isFoundSign;
         for (int i = 0; i < rows; i++) {
-            System.out.print("|  ");
-            System.out.println(cardsDetails);
-            cardsDetails="";
             for (int j = 0; j < cols; j++) {
                 if(cardIndex+1<10)
                     System.out.print(" ");
                 //System.out.printf("%d. %s [ %s , %b]%-20s", (cardIndex+1), cards.get(cardIndex).getWord(), cards.get(cardIndex).getTeamName(), cards.get(cardIndex).isFound(), " ");
+
                 System.out.printf("%-20s", cards.get(cardIndex).getWord());
                 isFoundSign = cards.get(cardIndex).isFound() ? "V" : "X";
-                cardsDetails += " ["+(cardIndex+1)+"] "+isFoundSign+" ("+cards.get(cardIndex).getTeamName()+")           ";
+                cardsDetails[j] = "["+(cardIndex+1)+"] "+isFoundSign+" ("+cards.get(cardIndex).getTeamName()+")";
                 cardIndex++;
             }
-            System.out.println("|");
-
+            System.out.println();
+            for(String str:cardsDetails){
+                System.out.printf("%-20s",str);
+            }
+            System.out.println();
         }
     }
 
@@ -101,16 +102,17 @@ public class GameUI {
     public void startGame(){
         this.isGameOver = false;
 
-        displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.GUESSER);
-//        while (!this.isGameOver){
-//            this.isGameOver = playTeamTurn();
-//            this.game.passTurn();
-//        }
-//        System.out.println("The winning team is "+this.game.getWinningTeam().getTeamName()+"!!!");
+        //displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.GUESSER);
+        while (!this.isGameOver){
+            this.isGameOver = playTeamTurn();
+            this.game.passTurn();
+        }
+        System.out.println("The winning team is "+this.game.getWinningTeam().getTeamName()+"!!!");
     }
 
     private boolean playTeamTurn(){
-        this.printAgentBoard();
+        //this.printAgentBoard();
+        displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.SPYMASTER);
 
         System.out.println(this.game.getCurrentTeam().getTeamName()+"'s Turn!");
         System.out.println("Your score is "+this.game.getCurrentTeam().getScore() + " / " + this.game.getCurrentTeam().getCardAmount());
@@ -125,13 +127,14 @@ public class GameUI {
         System.out.println("Enter how many guesses: ");
         amountOfWordsToGuess = in.nextInt();
         in.nextLine();
-        //******* print guessers board **********
-        this.printAgentBoard();
-        System.out.println("Hello "+this.game.getCurrentTeam().getTeamName() + "'s guessers! your clue is "+clue+ "and you have "+amountOfWordsToGuess+" words to guess.");
+
+
+        System.out.println("Hello "+this.game.getCurrentTeam().getTeamName() + "'s guessers! your clue is "+clue+ " and you have "+amountOfWordsToGuess+" words to guess.");
         System.out.println("if you want to pass this turn, enter 0.");
         this.guesserTurnIndex=0;
         boolean correctGuess = true;
         while (guesserTurnIndex < amountOfWordsToGuess && correctGuess) {
+            displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.GUESSER);
             System.out.println("guess #"+(guesserTurnIndex+1)+": ");
             guessIndex = in.nextInt();
             guess = this.game.makeGuess(guessIndex-1);

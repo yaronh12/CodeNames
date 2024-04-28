@@ -78,6 +78,8 @@ public class Game {
         // Check if the guessed word is on the board.
         if (cardGuess == null) {
             guessInfo.setWordOnBoard(false); // The guessed word is not on the board.
+            return guessInfo;
+
         } else {
             guessInfo.setWordOnBoard(true);
         }
@@ -86,6 +88,8 @@ public class Game {
         // Check if the card has already been found in previous guesses.
         if (cardGuess.isFound()) {
             guessInfo.setWordAlreadyFound(true); // The card was already found, so no further action is taken on it.
+            return guessInfo;
+
         } else {
             guessInfo.setWordAlreadyFound(false); // The card has not been found yet.
             cardGuess.setFound(); // Mark the card as found, indicating it has been guessed this game.
@@ -95,6 +99,8 @@ public class Game {
         if (this.isGuessCorrect(cardGuess)) {
             this.teams.get(this.currentTeamIndex).addScore(); // Correct guesses score a point for the guessing team.
             guessInfo.setGuessCorrect(true);
+            return guessInfo;
+
         } else {
             guessInfo.setGuessCorrect(false); // Record that the guess was incorrect.
         }
@@ -104,6 +110,8 @@ public class Game {
             this.getTeamByName(cardGuess.getTeamName()).addScore(); // Incorrectly guessing an opponent's word gives them a point.
             guessInfo.setGuessedForOtherTeam(true);
             guessInfo.setTeamNameOnCard(cardGuess.getTeamName()); // Record the team name associated with the guessed card.
+            return guessInfo;
+
         }
 
         // Check if the guess was for a black card, which is typically a losing move.
@@ -113,6 +121,8 @@ public class Game {
         // Check if the guessed card is a neutral card (not belonging to any team).
         if (cardGuess.getTeamName().isEmpty()) {
             guessInfo.setGuessedWordWithoutTeam(true); // The guessed word is a neutral word.
+            return guessInfo;
+
         } else {
             guessInfo.setGuessedWordWithoutTeam(false); // The guessed word is not a neutral word.
         }
