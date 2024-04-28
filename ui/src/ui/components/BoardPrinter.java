@@ -1,6 +1,6 @@
-package ui;
+package ui.components;
 
-import components.Card;
+import components.card.Card;
 
 import java.util.*;
 

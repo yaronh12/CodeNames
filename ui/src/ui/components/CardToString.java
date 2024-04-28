@@ -1,4 +1,4 @@
-package ui;
+package ui.components;
 
 public class CardToString {
     public String word;

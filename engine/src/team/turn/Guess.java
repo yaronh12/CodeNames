@@ -1,4 +1,4 @@
-package team;
+package team.turn;
 
 public class Guess {
     private boolean isWordOnBoard;

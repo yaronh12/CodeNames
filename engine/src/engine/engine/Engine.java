@@ -1,8 +1,11 @@
-package engine;
+package engine.engine;
 
 import java.util.List;
-import components.*;
-import team.*;
+
+import components.card.Card;
+import team.team.Team;
+import team.team.TeamsInfo;
+import team.turn.Guess;
 //menu:
 //1. load xml file
 //after the file got loaded:

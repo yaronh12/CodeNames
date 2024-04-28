@@ -1,23 +1,28 @@
-package ui;
+package ui.game;
 
-import engine.Engine;
-import engine.EngineImpl;
-import team.*;
-import components.*;
+import engine.engine.Engine;
+import engine.engine.EngineImpl;
+import team.team.Team;
+import team.team.TeamsInfo;
+import team.turn.Clue;
+import team.turn.ClueValidator;
+import team.turn.Guess;
+import ui.components.BoardPrinter;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
-import static ui.BoardPrinter.displayBoard;
+import static ui.components.BoardPrinter.displayBoard;
 
 public class GameUI {
 
     //1. wrap it up under packege
     private Engine game;
     private boolean isGameOver;
+
+    private boolean isGameActive=false;
 
     private int guesserTurnIndex; //ask aviad for better solution
     public void printGameData(){
@@ -51,26 +56,43 @@ public class GameUI {
 
 
     public void mainMenu(){
-        Scanner in = new Scanner(System.in);
-        System.out.println("1. Show game details");
-        System.out.println("2. Start new game");
-        System.out.println("3. Exit system");
-        System.out.println("Please enter number:");
+        int numOfOptions;
+        while(true) {
+            Scanner in = new Scanner(System.in);
+            numOfOptions=3;
+            System.out.println();
+            System.out.println("MAIN MENU:");
+            System.out.println("1. Show game details");
+            System.out.println("2. Start new game");
+            System.out.println("3. Exit system");
+            if(isGameActive){
+                System.out.println("4. Continue");
+                numOfOptions++;
+            }
+            System.out.println("Please enter number:");
 
-        //int userChoice = in.nextInt();
 
-        int userChoice = getValidInteger(1, 3);
+            int userChoice = getValidInteger(1, numOfOptions);
 
-        switch(userChoice){
-            case 1:
-                printGameData();
-                break;
-            case 2:
-                startGame();
-                break;
-            case 3:
-                System.out.println("Goodbye!");
-                break;
+            switch (userChoice) {
+                case 1:
+                    printGameData();
+                    break;
+                case 2:
+                    if(isGameActive)
+                        game = new EngineImpl();
+                    else
+                        isGameActive = true;
+                    isGameOver=false;
+                    startGame();
+                    break;
+                case 3:
+                    System.out.println("Goodbye!");
+                    return;
+                case 4:
+                    startGame();
+                    break;
+            }
         }
     }
 
@@ -97,15 +119,44 @@ public class GameUI {
 
 
     public void startGame(){
-        this.isGameOver = false;
 
-        while (!this.isGameOver){
-            this.isGameOver = playTeamTurn();
-            this.game.passTurn();
+        boolean keepPlaying=true;
+        while (!this.isGameOver && isGameActive && keepPlaying){
+            keepPlaying = startTurnMenu();
         }
-        System.out.println("The winning team is "+this.game.getWinningTeam().getTeamName()+"!!!");
+        if(isGameOver){
+            System.out.println("The winning team is "+this.game.getWinningTeam().getTeamName()+"!!!");
+            isGameActive=false;
+        }
     }
 
+        private boolean startTurnMenu(){
+            System.out.println();
+            System.out.println(this.game.getCurrentTeam().getTeamName()+"'s Turn!");
+            System.out.println("Please select one of the following optins:");
+            System.out.println("1. Play your turn");
+            System.out.println("2. Show Active Game Details");
+            System.out.println("3. Start new game");
+            System.out.println("4. Exit to main menu");
+            int userChoice = getValidInteger(1,4);
+            switch(userChoice){
+                case 1:
+                    this.isGameOver = playTeamTurn();
+                    this.game.passTurn();
+                    break;
+                case 2:
+                    printActiveGameInfo();
+                    break;
+                case 3:
+                    System.out.println("Starting new game....");
+                    game = new EngineImpl();
+                    break;
+                case 4:
+                    return false;
+
+            }
+            return true;
+        }
 
 
     /**
@@ -240,7 +291,7 @@ public class GameUI {
 
 
 
-    private void printGameInfo(){
+    private void printActiveGameInfo(){
         TeamsInfo teamsInfo = this.game.getTeamsInfo();
         displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.SPYMASTER);
         List<String> teamNames = teamsInfo.getTeamNames();

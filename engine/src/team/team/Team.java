@@ -1,4 +1,4 @@
-package team;
+package team.team;
 
 public class Team {
     private final String name;

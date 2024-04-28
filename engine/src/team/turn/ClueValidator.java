@@ -1,5 +1,6 @@
-package team;
-import components.*;
+package team.turn;
+import components.card.Card;
+
 import java.util.*;
 
 

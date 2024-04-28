@@ -1,6 +1,7 @@
-package components;
+package components.board;
 
-import team.Team;
+import components.card.Card;
+import team.team.Team;
 
 import java.util.*;
 

@@ -1,4 +1,6 @@
-package team;
+package team.team;
+
+import team.team.Team;
 
 import java.util.ArrayList;
 import java.util.List;

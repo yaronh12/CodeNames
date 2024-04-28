@@ -1,10 +1,13 @@
-package engine;
+package engine.game;
 
 import java.util.ArrayList;
 import java.util.List;
-import components.*;
-import team.Guess;
-import team.*;
+
+import components.board.Board;
+import components.card.Card;
+import team.team.Team;
+import team.team.TeamsInfo;
+import team.turn.Guess;
 
 public class Game {
     private List<Team> teams;

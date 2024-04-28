@@ -1,13 +1,15 @@
-package engine;
+package engine.engine;
 
 import java.util.List;
 
-import team.Guess;
-import team.Team;
-import components.*;
-import team.TeamsInfo;
+import components.card.Card;
+import engine.data.Data;
+import engine.game.Game;
+import team.turn.Guess;
+import team.team.Team;
+import team.team.TeamsInfo;
 
-public class EngineImpl implements Engine{
+public class EngineImpl implements Engine {
     private Data gameData = new Data();
     private Game activeGame = new Game(this.gameData.getTeamsNames(), this.gameData.getHowManyWordsForEachTeam(), this.getRegularWords(),
                                         this.getBlackWords(), this.getHowManyRegularWordsInGame(),
@@ -60,8 +62,14 @@ public class EngineImpl implements Engine{
     }
 
     public boolean isGameOver(Guess guess){
-        if(guess.isGuessedWordBlack())
+        if(guess.isGuessedWordBlack()){
+            // picking the other team to win in case of black word
+            // ask aviad what to do in case of multiple teams
+            this.activeGame.passTurn();
+            this.activeGame.setWinningTeam(this.activeGame.getTeams().get(this.activeGame.getCurrentTeamIndex()));
             return true;
+        }
+
 
         for(Team team: this.activeGame.getTeams()){
             if(team.getCardAmount() == team.getScore()){
