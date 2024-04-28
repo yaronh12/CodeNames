@@ -5,6 +5,7 @@ import java.util.List;
 import team.Guess;
 import team.Team;
 import components.*;
+import team.TeamsInfo;
 
 public class EngineImpl implements Engine{
     private Data gameData = new Data();
@@ -74,6 +75,10 @@ public class EngineImpl implements Engine{
 
     public Team getWinningTeam(){
        return this.activeGame.getWinningTeam();
+    }
+
+    public TeamsInfo getTeamsInfo(){
+       return this.activeGame.getTeamsInfo();
     }
 
 

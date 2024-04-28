@@ -49,6 +49,9 @@ public interface Engine {
     Team getWinningTeam();
     boolean isGameOver(Guess guess);
 
+    TeamsInfo getTeamsInfo();
+
+
 
 
 }

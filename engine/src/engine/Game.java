@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import components.*;
 import team.Guess;
-import team.Team;
+import team.*;
 
 public class Game {
     private List<Team> teams;
-    private int currentTeamIndex;
+   // private int currentTeamIndex;
+    private TeamsInfo teamsInfo;
     private Board board;
     private Team winningTeam;
 
     public Game(List<String> teamNames, List<Integer> teamCardNumber, List<String> regularWords, List<String> blackWords,
                 int regularWordsAmount, int blackWordsAmount, int boardRows, int boardCol){
         this.setTeams(teamNames, teamCardNumber);
-        this.currentTeamIndex = 0;
+        teamsInfo = new TeamsInfo(teams);
+        //this.currentTeamIndex = 0;
         board = new Board(regularWords, blackWords, regularWordsAmount, blackWordsAmount, boardRows, boardCol, this.teams);
     }
 
@@ -27,16 +29,19 @@ public class Game {
         }
     }
 
-    public void passTurn(){
-        this.currentTeamIndex = (++this.currentTeamIndex) % this.teams.size();
+    public TeamsInfo getTeamsInfo(){
+        return this.teamsInfo;
     }
 
+    public void passTurn(){
+        this.teamsInfo.passTurn();
+    }
     public List<Team> getTeams(){
         return this.teams;
     }
 
     public int getCurrentTeamIndex(){
-        return this.currentTeamIndex;
+        return this.teamsInfo.getCurrentTeamIndex();
     }
 
     public Board getBoard(){
@@ -97,7 +102,7 @@ public class Game {
 
         // Determine if the guess was correct, i.e., matches a card of the guessing team.
         if (this.isGuessCorrect(cardGuess)) {
-            this.teams.get(this.currentTeamIndex).addScore(); // Correct guesses score a point for the guessing team.
+            this.teams.get(this.getCurrentTeamIndex()).addScore(); // Correct guesses score a point for the guessing team.
             guessInfo.setGuessCorrect(true);
             return guessInfo;
 
@@ -143,7 +148,7 @@ public class Game {
     }
 
     private boolean isGuessCorrect(Card guess){
-        return guess.getTeamName().equals(teams.get(this.currentTeamIndex).getTeamName());
+        return guess.getTeamName().equals(teams.get(this.getCurrentTeamIndex()).getTeamName());
     }
 
     private boolean isGuessForOtherTeam(Card guess, Guess currGuess){

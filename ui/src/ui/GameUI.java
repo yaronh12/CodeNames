@@ -9,6 +9,7 @@ import components.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 import static ui.BoardPrinter.displayBoard;
 
@@ -55,7 +56,11 @@ public class GameUI {
         System.out.println("2. Start new game");
         System.out.println("3. Exit system");
         System.out.println("Please enter number:");
-        int userChoice = in.nextInt();
+
+        //int userChoice = in.nextInt();
+
+        int userChoice = getValidInteger(1, 3);
+
         switch(userChoice){
             case 1:
                 printGameData();
@@ -64,45 +69,36 @@ public class GameUI {
                 startGame();
                 break;
             case 3:
-                //exitGame();
+                System.out.println("Goodbye!");
                 break;
         }
     }
 
-    public void printAgentBoard(){
-        int rows = game.getBoardRows();
-        int cols = game.getBoardCols();
-        List<Card> cards = game.getBoardState();
-        int cardIndex = 0;
-        String[] cardsDetails = new String[cols];
-        String isFoundSign;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if(cardIndex+1<10)
-                    System.out.print(" ");
-                //System.out.printf("%d. %s [ %s , %b]%-20s", (cardIndex+1), cards.get(cardIndex).getWord(), cards.get(cardIndex).getTeamName(), cards.get(cardIndex).isFound(), " ");
+    private int getValidInteger(int lowerLimit, int upperLimit) {
+        Scanner scanner = new Scanner(System.in);
+        boolean isAnInt = false;
+        int userChoice = 0;
 
-                System.out.printf("%-20s", cards.get(cardIndex).getWord());
-                isFoundSign = cards.get(cardIndex).isFound() ? "V" : "X";
-                cardsDetails[j] = "["+(cardIndex+1)+"] "+isFoundSign+" ("+cards.get(cardIndex).getTeamName()+")";
-                cardIndex++;
+        do {
+            try {
+                userChoice = scanner.nextInt();
+                isAnInt = true;
+                if ((userChoice < lowerLimit || userChoice > upperLimit)){
+                    System.out.println("Error: Please enter a valid number between " +lowerLimit+ " and " + upperLimit+ ".");
+                }
+            } catch (InputMismatchException ime) {
+                scanner.nextLine(); // Consume the invalid input and reset
+                System.out.println("Invalid input(not a number). Please enter a valid number.");
             }
-            System.out.println();
-            for(String str:cardsDetails){
-                System.out.printf("%-20s",str);
-            }
-            System.out.println();
-        }
+        }while ((userChoice < lowerLimit || userChoice > upperLimit) || !isAnInt);
+
+       return userChoice;
     }
-
-
-
 
 
     public void startGame(){
         this.isGameOver = false;
 
-        //displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.GUESSER);
         while (!this.isGameOver){
             this.isGameOver = playTeamTurn();
             this.game.passTurn();
@@ -110,41 +106,71 @@ public class GameUI {
         System.out.println("The winning team is "+this.game.getWinningTeam().getTeamName()+"!!!");
     }
 
+
+
+    /**
+     * Manages a single turn for the current team in the game. This method orchestrates the process of
+     * displaying the game board, getting a clue from the Spymaster, and managing guesses from the guessers.
+     * It continues to prompt for guesses until the number of guesses allowed (based on the clue) is reached
+     * or until a guess ends the turn prematurely (e.g., a wrong guess or a guess on a black card).
+     *
+     * @return true if the game is over (triggered by a game-ending guess), otherwise false.
+     */
     private boolean playTeamTurn(){
-        //this.printAgentBoard();
+        Scanner in = new Scanner(System.in);
+        Guess guess;
+        Clue clue;
+
+        // Display the game board for the Spymaster view
         displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.SPYMASTER);
 
+        // Announce the current team's turn and display their score
         System.out.println(this.game.getCurrentTeam().getTeamName()+"'s Turn!");
         System.out.println("Your score is "+this.game.getCurrentTeam().getScore() + " / " + this.game.getCurrentTeam().getCardAmount());
-        int amountOfWordsToGuess;
-        String clue;
-        int guessIndex;
-        Guess guess;
-        Scanner in = new Scanner(System.in);
-        System.out.println(this.game.getCurrentTeam().getTeamName() + "'s agent, please give a clue. to confirm press Enter.");
-        System.out.println("Enter the clue: ");
-        clue = in.nextLine();
-        System.out.println("Enter how many guesses: ");
-        amountOfWordsToGuess = in.nextInt();
-        in.nextLine();
 
+        // Get the clue from the Spymaster
+        clue = getSpyMasterClue(in);
 
-        System.out.println("Hello "+this.game.getCurrentTeam().getTeamName() + "'s guessers! your clue is "+clue+ " and you have "+amountOfWordsToGuess+" words to guess.");
+        // Inform the guessers of the clue and the number of words they need to guess
+        System.out.println("Hello "+this.game.getCurrentTeam().getTeamName() + "'s guessers! your clue is "+clue.getClueWord()+ " and you have "+clue.getNumOfWordToGuess()+" words to guess.");
         System.out.println("if you want to pass this turn, enter 0.");
+
+        // Process guesses until all are made or a guess ends the turn
         this.guesserTurnIndex=0;
         boolean correctGuess = true;
-        while (guesserTurnIndex < amountOfWordsToGuess && correctGuess) {
-            displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.GUESSER);
-            System.out.println("guess #"+(guesserTurnIndex+1)+": ");
-            guessIndex = in.nextInt();
-            guess = this.game.makeGuess(guessIndex-1);
+
+        while (guesserTurnIndex < clue.getNumOfWordToGuess() && correctGuess) {
+            guess = askForGuess(guesserTurnIndex+1);
             correctGuess = this.giveGuessResponse(guess);
+
             if(this.game.isGameOver(guess))
                 return true;
         }
+
+        // Provide feedback on the updated score after the turn is complete
         System.out.println("Your updated score is: "+this.game.getCurrentTeam().getScore() + " / " + this.game.getCurrentTeam().getCardAmount());
         return false;
     }
+
+    private Guess askForGuess(int turn){
+        Scanner in = new Scanner(System.in);
+        int guessIndex;
+
+        // Display the game board for the guesser, indicating where each card is and which ones are still available
+        displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.GUESSER);
+
+        // Prompt the player to enter their guess for the current turn
+        System.out.println("guess #" + turn + ": ");
+
+        // Retrieve the guess index entered by the player, adjust for zero-based index used in the game logic
+        guessIndex = getValidInteger(1, game.getBoardState().size());
+
+        // Process the guess and return the outcome
+        return this.game.makeGuess(guessIndex - 1);
+
+    }
+
+
 
     private boolean giveGuessResponse(Guess guess){
         if(guess.isTurnPassed()){
@@ -180,6 +206,55 @@ public class GameUI {
     }
 
 
+    private Clue getSpyMasterClue(Scanner in) {
+        String clueWord;
+        int amountOfWordsToGuess;
+        boolean clueWordIsValid = true;
+
+        System.out.println(this.game.getCurrentTeam().getTeamName() + "'s spymaster, please give a clue. to confirm press Enter.");
+
+        do {
+            System.out.println("Please enter a clue word:");
+            clueWord = in.nextLine();
+            clueWordIsValid = true; // Assume valid unless proven otherwise
+
+            if (ClueValidator.isClueContainSpaces(clueWord)) {
+                System.out.println("Error: The clue word must not contain spaces.");
+                clueWordIsValid = false;
+            } else if (ClueValidator.isClueWordOnBoard(clueWord, game.getBoardState())) {
+                System.out.println("Error: The clue word cannot match any word exactly on the board.");
+                clueWordIsValid = false;
+            } else if (ClueValidator.isClueWordSubStringOfWordOnBoard(clueWord, game.getBoardState())) {
+                System.out.println("Error: The clue word cannot be a substring or superstring of any word on the board.");
+                clueWordIsValid = false;
+            }
+        } while (!clueWordIsValid);
+
+
+
+        System.out.println("Enter how many guesses: ");
+        amountOfWordsToGuess = getValidInteger(1, game.getCurrentTeam().getCardAmount() - game.getCurrentTeam().getScore());
+
+        return new Clue(clueWord, amountOfWordsToGuess);
+    }
+
+
+
+    private void printGameInfo(){
+        TeamsInfo teamsInfo = this.game.getTeamsInfo();
+        displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.SPYMASTER);
+        List<String> teamNames = teamsInfo.getTeamNames();
+        List<String> teamScores = teamsInfo.getTeamsCurrentScore();
+        List<Integer> teamTurnCounter = teamsInfo.getTeamsTurnCounter();
+        System.out.println("Teams Information:");
+        for(int i=0;i< teamsInfo.getHowManyTeams();i++){
+            System.out.println("Team #"+(i+1));
+            System.out.println(" - Name: "+teamNames.get(i));
+            System.out.println(" - Score: "+teamScores.get(i));
+            System.out.println(" - Turns played: "+teamTurnCounter.get(i));
+        }
+        System.out.println("Next turn is "+teamsInfo.getNextTeamName());
+    }
 }
 
 
