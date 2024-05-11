@@ -1,11 +1,14 @@
 package engine.engine;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import components.card.Card;
 import team.team.Team;
 import team.team.TeamsInfo;
 import team.turn.Guess;
+
+import javax.xml.bind.JAXBException;
 //menu:
 //1. load xml file
 //after the file got loaded:
@@ -23,7 +26,9 @@ import team.turn.Guess;
 //        else - break the loop and pass the turn to the next team
 
 public interface Engine {
-    //void readXmlFile();
+    void readXmlFile(String xmlName) throws FileNotFoundException, JAXBException;
+
+    void loadGameData();
 
     List<String> getRegularWords();
     List<String> getBlackWords();

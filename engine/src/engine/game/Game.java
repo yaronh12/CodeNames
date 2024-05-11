@@ -1,21 +1,28 @@
 package engine.game;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import components.board.Board;
 import components.card.Card;
+import engine.data.loader.GameDataLoader;
 import team.team.Team;
 import team.team.TeamsInfo;
 import team.turn.Guess;
 
 public class Game {
+
     private List<Team> teams;
    // private int currentTeamIndex;
     private TeamsInfo teamsInfo;
     private Board board;
     private Team winningTeam;
 
+    public Game(GameDataLoader gameGameDataLoader){
+        this.teams = gameGameDataLoader.initializeTeams();
+        this.teamsInfo = new TeamsInfo(this.teams);
+        this.board = gameGameDataLoader.initializeBoard(this.teams);
+    }
+    /*
     public Game(List<String> teamNames, List<Integer> teamCardNumber, List<String> regularWords, List<String> blackWords,
                 int regularWordsAmount, int blackWordsAmount, int boardRows, int boardCol){
         this.setTeams(teamNames, teamCardNumber);
@@ -23,14 +30,18 @@ public class Game {
         //this.currentTeamIndex = 0;
         board = new Board(regularWords, blackWords, regularWordsAmount, blackWordsAmount, boardRows, boardCol, this.teams);
     }
+     */
 
-    public void setTeams(List<String> teamNames, List<Integer> teamCardNumber){
+
+    //useless func foe ex1 there are only two teams
+   /* public void setTeams(List<String> teamNames, List<Integer> teamCardNumber){
         teams = new ArrayList<>();
         int howManyTeams = teamNames.size();
         for (int i = 0; i < howManyTeams; i++) {
             teams.add(new Team(teamNames.get(i), teamCardNumber.get(i)));
         }
     }
+    */
 
     public TeamsInfo getTeamsInfo(){
         return this.teamsInfo;

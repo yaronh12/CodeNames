@@ -1,12 +1,39 @@
-package engine.data;
+package engine.data.loader;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import components.board.Board;
+import generated.ECNGame;
+import team.team.Team;
+import java.util.*;
 
-public class Data {
+public class GameDataLoader {
+    ECNGame gameData;
 
+    public GameDataLoader(ECNGame gameData){
+        this.gameData = gameData;
+    }
+    public Board initializeBoard(List<Team> teams){
+        List<String> regularWords = Arrays.asList(this.gameData.getECNWords().getECNGameWords().trim().split("\\s+"));
+        System.out.println(regularWords);
+       // regularWords.remove(0);
+        List<String> blackWords = Arrays.asList(this.gameData.getECNWords().getECNBlackWords().trim().split("\\s+"));
+      //  blackWords.remove(0);
+        int regularWordsAmount = gameData.getECNBoard().getCardsCount();
+        int blackWordsAmount = gameData.getECNBoard().getBlackCardsCount();
+        int rows = gameData.getECNBoard().getECNLayout().getRows();
+        int cols = gameData.getECNBoard().getECNLayout().getColumns();
+        return new Board(regularWords,blackWords,regularWordsAmount,blackWordsAmount,rows,cols,teams);
+    }
+
+    public List<Team> initializeTeams(){
+        List<Team> teams = new ArrayList<>();
+
+        teams.add(new Team(gameData.getECNTeam1().getName(), gameData.getECNTeam1().getCardsCount()));
+        teams.add(new Team(gameData.getECNTeam2().getName(), gameData.getECNTeam2().getCardsCount()));
+
+        return teams;
+    }
+
+    /*
     private int cardsCount = 24;
     private int blackCardsCount = 1;
 
@@ -210,5 +237,5 @@ public class Data {
 
     public List<String> getBlackWordsList() {
         return blackWordsList;
-    }
+    }*/
 }

@@ -9,7 +9,9 @@ import team.turn.ClueValidator;
 import team.turn.Guess;
 import ui.board.BoardPrinter;
 
-
+import javax.xml.bind.JAXBException;
+import java.io.FileNotFoundException;
+import java.nio.file.InvalidPathException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.InputMismatchException;
@@ -18,8 +20,7 @@ import static ui.board.BoardPrinter.displayBoard;
 
 public class GameUI {
 
-    //1. wrap it up under packege
-    private Engine game;
+    private Engine game = new EngineImpl();
     private boolean isGameOver;
 
     private boolean isGameActive=false;
@@ -46,27 +47,49 @@ public class GameUI {
 
     }
 
-    public void startSystem(){
-        Scanner in = new Scanner(System.in);
-        System.out.println("Welcome to CodeNames!");
-        System.out.println("Press Enter to load the Game.");
-        in.nextLine();
-        game = new EngineImpl();
+    public void startSystem() {
+        System.out.println("Welcome to CodeNames!\n-----------------------------");
+        loadFile();
+        // ----- need to check valid xml path -----
+        //
     }
+
+    private void loadFile(){
+        Scanner in = new Scanner(System.in);
+        boolean isFileValid = false;
+        do{
+            System.out.println("Please enter the full path to your XML file (e.g., C:\\Users\\YourName\\Documents\\example.xml on Windows)");
+            try{
+                game.readXmlFile(in.nextLine());
+                isFileValid = true;
+            }catch (FileNotFoundException e) {
+                System.out.println("The file was not found. Please check the path and try again.");
+            } catch (InvalidPathException e) {
+                System.out.println("The file path is invalid. Please enter a correct path.");
+            } catch(JAXBException e){
+                System.out.println("JAXB Exception");
+            }
+
+            //check if file is valid
+        } while(!isFileValid);
+
+    }
+
 
 
     public void mainMenu(){
         int numOfOptions;
         while(true) {
             Scanner in = new Scanner(System.in);
-            numOfOptions=3;
+            numOfOptions=4;
             System.out.println();
             System.out.println("MAIN MENU:");
             System.out.println("1. Show game details");
             System.out.println("2. Start new game");
-            System.out.println("3. Exit system");
+            System.out.println("3. Load XML File");
+            System.out.println("4. Exit system");
             if(isGameActive){
-                System.out.println("4. Continue");
+                System.out.println("5. Continue");
                 numOfOptions++;
             }
             System.out.println("Please enter number:");
@@ -79,17 +102,20 @@ public class GameUI {
                     printGameData();
                     break;
                 case 2:
-                    if(isGameActive)
-                        game = new EngineImpl();
-                    else
+                    //if(isGameActive)
+                        game.loadGameData();
+                    //else
                         isGameActive = true;
                     isGameOver=false;
                     startGame();
                     break;
                 case 3:
+                    loadFile();
+                    break;
+                case 4:
                     System.out.println("Goodbye!");
                     return;
-                case 4:
+                case 5:
                     startGame();
                     break;
             }
@@ -149,7 +175,7 @@ public class GameUI {
                     break;
                 case 3:
                     System.out.println("Starting new game....");
-                    game = new EngineImpl();
+                    game.loadGameData();
                     break;
                 case 4:
                     return false;
@@ -307,5 +333,7 @@ public class GameUI {
         System.out.println("Next turn is "+teamsInfo.getNextTeamName());
     }
 }
+
+
 
 
