@@ -1,4 +1,4 @@
-package ui.components;
+package ui.board;
 
 import components.card.Card;
 

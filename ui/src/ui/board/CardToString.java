@@ -1,4 +1,4 @@
-package ui.components;
+package ui.board;
 
 public class CardToString {
     public String word;

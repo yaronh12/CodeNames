@@ -7,14 +7,14 @@ import team.team.TeamsInfo;
 import team.turn.Clue;
 import team.turn.ClueValidator;
 import team.turn.Guess;
-import ui.components.BoardPrinter;
+import ui.board.BoardPrinter;
 
 
 import java.util.List;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
-import static ui.components.BoardPrinter.displayBoard;
+import static ui.board.BoardPrinter.displayBoard;
 
 public class GameUI {
 
