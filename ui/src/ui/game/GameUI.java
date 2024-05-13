@@ -58,7 +58,7 @@ public class GameUI {
         Scanner in = new Scanner(System.in);
         boolean isFileValid = false;
         do{
-            System.out.println("Please enter the full path to your XML file (e.g., C:\\Users\\YourName\\Documents\\example.xml on Windows)");
+            System.out.println("\nPlease enter the full path to your XML file (e.g., C:\\Users\\YourName\\Documents\\example.xml on Windows)");
             try{
                 game.readXmlFile(in.nextLine());
                 isFileValid = true;
@@ -68,6 +68,8 @@ public class GameUI {
                 System.out.println("The file path is invalid. Please enter a correct path.");
             } catch(JAXBException e){
                 System.out.println("JAXB Exception");
+            } catch (RuntimeException e){
+                System.out.println(e.getMessage());
             }
 
             //check if file is valid

@@ -7,6 +7,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
+import engine.data.exeption.CardCountException;
+import engine.data.exeption.InsufficientTableSizeException;
+import engine.data.exeption.TeamCardLimitExceededException;
+import engine.data.exeption.TeamNamesNotUniqueException;
 import engine.data.loader.GameDataLoader;
 import components.card.Card;
 import engine.game.Game;
@@ -26,14 +32,57 @@ public class EngineImpl implements Engine {
     private Game activeGame;
     private ECNGame gameDataFile;
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "generated";
-    public void readXmlFile(String xmlName) throws FileNotFoundException, JAXBException {
+    public void readXmlFile(String xmlName) throws FileNotFoundException, JAXBException, RuntimeException {
 
             InputStream inputStream = new FileInputStream(new File(xmlName));
             JAXBContext jc = JAXBContext.newInstance(JAXB_XML_GAME_PACKAGE_NAME);
             Unmarshaller u = jc.createUnmarshaller();
             gameDataFile = (ECNGame) u.unmarshal(inputStream);
 
+            xmlContentValidator(gameDataFile);
 
+    }
+
+    private void xmlContentValidator(ECNGame gameInfo) throws RuntimeException{
+        int cardsCount = gameInfo.getECNBoard().getCardsCount();
+
+        long availableWordsCount = Arrays.stream(Optional.ofNullable(gameInfo.getECNWords().getECNGameWords())
+                .orElse("").split(" "))
+                .filter(word-> !word.equals("\n"))
+                .distinct()
+                .count();
+
+
+
+        if (cardsCount > availableWordsCount){
+            throw new CardCountException("The number of cards on the board (" + cardsCount + ") exceeds the number of available game words ("
+                    + availableWordsCount + ").");
+        }
+
+        int blackCardsCount = gameInfo.getECNBoard().getBlackCardsCount();
+        int availableBlackWordsCount = gameInfo.getECNWords().getECNBlackWords().trim().split(" ").length;
+
+        if(blackCardsCount > availableBlackWordsCount){
+            throw new CardCountException("The number of black cards on the board (" + blackCardsCount+ ") exceeds the number" +
+                    " of available game words (" + availableBlackWordsCount + ").");
+        }
+
+        int teamsTotalCardAmount = gameInfo.getECNTeam1().getCardsCount() + gameInfo.getECNTeam2().getCardsCount();
+        if(teamsTotalCardAmount > cardsCount){
+            throw new TeamCardLimitExceededException("The combined total card amount of the teams (" + teamsTotalCardAmount +
+                    ") exceeds the total available cards (" + cardsCount + ").");
+        }
+
+        int boardSize = gameInfo.getECNBoard().getECNLayout().getRows() * gameInfo.getECNBoard().getECNLayout().getColumns();
+        if(boardSize != cardsCount + blackCardsCount){
+            throw new InsufficientTableSizeException("Board size mismatch: The total number of cells on the board (" + boardSize +
+                    ") does not equal the combined total of regular cards and black cards (" +
+                    (cardsCount + blackCardsCount) + ").");
+        }
+        if(gameInfo.getECNTeam1().getName().equals(gameInfo.getECNTeam2().getName())){
+            throw new TeamNamesNotUniqueException("The names of the two teams are identical, which is not allowed." +
+                    " Both teams are named '" + gameInfo.getECNTeam1().getName() + "'.");
+        }
     }
 
     public void loadGameData(){
