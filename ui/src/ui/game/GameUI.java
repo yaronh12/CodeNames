@@ -22,9 +22,7 @@ public class GameUI {
 
     private Engine game = new EngineImpl();
     private boolean isGameOver;
-
     private boolean isGameActive=false;
-
     private int guesserTurnIndex; //ask aviad for better solution
     public void printGameData(){
         System.out.println("--------------------------");
@@ -50,8 +48,6 @@ public class GameUI {
     public void startSystem() {
         System.out.println("Welcome to CodeNames!\n-----------------------------");
         loadFile();
-        // ----- need to check valid xml path -----
-        //
     }
 
     private void loadFile(){
@@ -76,7 +72,6 @@ public class GameUI {
         } while(!isFileValid);
 
     }
-
 
 
     public void mainMenu(){
@@ -248,7 +243,6 @@ public class GameUI {
         return this.game.makeGuess(guessIndex - 1);
 
     }
-
 
 
     private boolean giveGuessResponse(Guess guess){
