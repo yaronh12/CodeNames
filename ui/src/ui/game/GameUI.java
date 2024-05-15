@@ -237,7 +237,7 @@ public class GameUI {
         System.out.println("guess #" + turn + ": ");
 
         // Retrieve the guess index entered by the player, adjust for zero-based index used in the game logic
-        guessIndex = getValidInteger(1, game.getBoardState().size());
+        guessIndex = getValidInteger(0, game.getBoardState().size());
 
         // Process the guess and return the outcome
         return this.game.makeGuess(guessIndex - 1);
