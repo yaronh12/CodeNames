@@ -13,7 +13,6 @@ public class GameDataLoader {
     }
     public Board initializeBoard(List<Team> teams){
         List<String> regularWords = Arrays.asList(this.gameData.getECNWords().getECNGameWords().trim().split("\\s+"));
-        System.out.println(regularWords);
        // regularWords.remove(0);
         List<String> blackWords = Arrays.asList(this.gameData.getECNWords().getECNBlackWords().trim().split("\\s+"));
       //  blackWords.remove(0);

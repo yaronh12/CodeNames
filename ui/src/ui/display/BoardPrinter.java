@@ -1,16 +1,32 @@
-package ui.board;
+package ui.display;
 
 import components.card.Card;
 
 import java.util.*;
 
+/**
+ * Handles the printing of the game board on the console, providing different views based on the user's role,
+ * such as SPYMASTER or GUESSER. This class formats and displays the board dynamically based on the content
+ * and size of the game board.
+ */
 public class BoardPrinter {
 
+    /**
+     * Enum defining the different roles that can view the board, which affects how the board is displayed.
+     */
     public enum Role {
         SPYMASTER, GUESSER
     }
 
 
+    /**
+     * Prints a single card with formatting based on the viewer's role.
+     *
+     * @param card  The card to be printed.
+     * @param index The index of the card on the board, used for display purposes.
+     * @param role  The viewer's role which determines the format of the display.
+     * @return      A formatted string representation of the card.
+     */
     public static CardToString printCard(Card card, int index, Role role) {
         String word = card.getWord();
         String wordFound = card.isFound() ? "V" : "X";
@@ -32,7 +48,15 @@ public class BoardPrinter {
 
 
 
-    // Display board with role-based output and ensure word is printed above the format line
+    /**
+     * Displays the entire game board, adjusting the spacing and alignment based on the maximum width of
+     * cards in each column to ensure a clean layout.
+     *
+     * @param cards The list of cards to display.
+     * @param rows  The number of rows in the board layout.
+     * @param cols  The number of columns in the board layout.
+     * @param role  The role of the viewer, affecting how cards are displayed.
+     */
     public static void displayBoard(List<Card> cards, int rows, int cols, Role role) {
         int index = 0;
         int[] maxWidths = new int[cols]; // Array to hold the maximum width needed for each column
@@ -70,7 +94,13 @@ public class BoardPrinter {
         }
     }
 
-    // Helper method to format strings to a specific width, centering the text
+    /**
+     * Helper method to format strings to a specified width by centering text within the width.
+     *
+     * @param input The string to format.
+     * @param width The width within which to center the string.
+     * @return      The centered string.
+     */
     private static String formatStringToWidth(String input, int width) {
         int padSize = (width - input.length()) / 2;
         String paddedString = String.format("%" + (input.length() + padSize) + "s", input);
@@ -78,6 +108,13 @@ public class BoardPrinter {
         return paddedString;
     }
 
+    /**
+     * Formats a list of cards into a list of string representations suitable for printing.
+     *
+     * @param cards The list of cards to format.
+     * @param role  The viewer's role.
+     * @return      A list of formatted card strings.
+     */
     private static List<CardToString> formatCards(List<Card> cards, Role role) {
         List<CardToString> formattedCards = new ArrayList<>();
         for (int i = 0; i < cards.size(); i++) {
@@ -86,6 +123,15 @@ public class BoardPrinter {
         return formattedCards;
     }
 
+    /**
+     * Calculates the maximum widths needed for each column based on the longest card string in each column,
+     * ensuring proper alignment when printed.
+     *
+     * @param formattedCards The formatted card strings.
+     * @param rows           The number of rows in the board layout.
+     * @param cols           The number of columns in the board layout.
+     * @return               An array of maximum widths for each column.
+     */
     private static int[] calculateMaxWidths(List<CardToString> formattedCards, int rows, int cols) {
         int index = 0;
         int[] maxWidths = new int[cols];
@@ -98,6 +144,5 @@ public class BoardPrinter {
         }
         return maxWidths;
     }
-
 }
 
