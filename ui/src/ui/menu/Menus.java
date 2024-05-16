@@ -43,10 +43,14 @@ public class Menus {
             System.out.println("1. Show game details");
             System.out.println("2. Start new game");
             System.out.println("3. Load XML File");
-            System.out.println("4. Exit system");
+
             if(isGameActive){
-                System.out.println("5. Continue");
+                System.out.println("4. Continue");
+                System.out.println("5. Exit system");
                 numOfOptions = 5;
+            }
+            else{
+                System.out.println("4. Exit system");
             }
             System.out.println("Please enter number:");
 
@@ -64,13 +68,20 @@ public class Menus {
                     break;
                 case 3:
                     loadFile(game);
+                    isGameActive = false;
                     break;
                 case 4:
+                    if(isGameActive){
+                        startGame();
+                    }
+                    else{
+                        System.out.println("Goodbye!");
+                         return;
+                    }
+                    break;
+                case 5:
                     System.out.println("Goodbye!");
                     return;
-                case 5:
-                    startGame();
-                    break;
             }
         }
     }
