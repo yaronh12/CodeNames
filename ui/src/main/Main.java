@@ -23,6 +23,6 @@ public class Main {
         game.startSystem();
 
         // Display the main menu and begin handling user input
-        game.mainMenu();
+       // game.mainMenu();
     }
 }

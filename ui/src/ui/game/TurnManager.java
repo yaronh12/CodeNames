@@ -124,7 +124,7 @@ public class TurnManager {
         do {
             System.out.println("Please enter a clue word:");
             clueWord = in.nextLine();
-            clueWordIsValid = !ClueValidator.isClueContainSpaces(clueWord) &&
+            clueWordIsValid =/* !ClueValidator.isClueContainSpaces(clueWord) &&*/
                     !ClueValidator.isClueWordOnBoard(clueWord, game.getBoardState()) &&
                     !ClueValidator.isClueWordSubStringOfWordOnBoard(clueWord, game.getBoardState());
             if (!clueWordIsValid) {
