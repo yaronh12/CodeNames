@@ -36,46 +36,48 @@ public class Menus {
      * loading game data, or exiting the system.
      */
     private void mainMenu(){
-     //   int numOfOptions;
+        int numOfOptions = 2;
         boolean isFileLoaded = false;
         while(true) {
-           // numOfOptions = 4;
+           //numOfOptions = 2;
             System.out.println();
             System.out.println("MAIN MENU:");
             System.out.println("1. Load XML File");
-            System.out.println("2. File details");
-            System.out.println("3. Start new game");
-            System.out.println("4. Play Turn");
-            System.out.println("5. Active game details");
-            System.out.println("6. Exit system");
+            if(isFileLoaded){
+                System.out.println("2. File details");
+                System.out.println("3. Start new game");
+                System.out.println("4. Play Turn");
+                System.out.println("5. Active game details");
+            }
+            System.out.println(numOfOptions+". Exit system");
 
             System.out.println("Please enter number:");
 
-            int userChoice = getValidInteger(1, 6);
+            int userChoice = getValidInteger(1,numOfOptions);
 
             switch (userChoice) {
                 case 1:
                     loadFile(game);
                     isFileLoaded = true;
+                    numOfOptions=6;
                     isGameActive = false;
                     break;
                 case 2:
-                    if(isFileLoaded){
+                    if(isFileLoaded)
                         printGameData(game);
+                    else {
+                        System.out.println("Goodbye!");
+                        return;
                     }
-                    else System.out.println("File need to be loaded!");
                     break;
                 case 3:
-                    if(isFileLoaded){
                         game.loadGameData();
                         isGameActive = true;
                         isGameOver = false;
                         System.out.println("New game...");
-                    }
-                    else System.out.println("File need to be loaded!");
                     break;
                 case 4:
-                    if(isFileLoaded && isGameActive){
+                    if(isGameActive){
                         this.isGameOver = playTeamTurn(game, guesserTurnIndex);
                         if(isGameOver){
                             System.out.println("The winning team is " + this.game.getWinningTeam().getTeamName() + "!!!");
@@ -83,15 +85,11 @@ public class Menus {
                         }
                         this.game.passTurn();
                     }
-                    else if(!isFileLoaded)
-                        System.out.println("File need to be loaded!");
                     else System.out.println("Start game to see active game details!");
                     break;
                 case 5:
-                    if(isFileLoaded && isGameActive)
+                    if(isGameActive)
                          printActiveGameInfo(game);
-                    else if(!isFileLoaded)
-                        System.out.println("File need to be loaded!");
                     else System.out.println("Start game to see active game details!");
                     break;
                 case 6:
