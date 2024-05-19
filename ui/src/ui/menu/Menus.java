@@ -46,8 +46,10 @@ public class Menus {
             if(isFileLoaded){
                 System.out.println("2. File details");
                 System.out.println("3. Start new game");
-                System.out.println("4. Play Turn");
-                System.out.println("5. Active game details");
+                if (isGameActive) {
+                    System.out.println("4. Play Turn");
+                    System.out.println("5. Active game details");
+                }
             }
             System.out.println(numOfOptions+". Exit system");
 
@@ -59,7 +61,7 @@ public class Menus {
                 case 1:
                     loadFile(game);
                     isFileLoaded = true;
-                    numOfOptions=6;
+                    numOfOptions=4;
                     isGameActive = false;
                     break;
                 case 2:
@@ -73,6 +75,7 @@ public class Menus {
                 case 3:
                         game.loadGameData();
                         isGameActive = true;
+                        numOfOptions=6;
                         isGameOver = false;
                         System.out.println("New game...");
                     break;
@@ -85,12 +88,18 @@ public class Menus {
                         }
                         this.game.passTurn();
                     }
-                    else System.out.println("Start game to see active game details!");
+                    else {
+                        System.out.println("Goodbye!");
+                        return;
+                    }
                     break;
                 case 5:
                     if(isGameActive)
                          printActiveGameInfo(game);
-                    else System.out.println("Start game to see active game details!");
+                    else {
+                        System.out.println("Goodbye!");
+                        return;
+                    }
                     break;
                 case 6:
                     System.out.println("Goodbye!");
