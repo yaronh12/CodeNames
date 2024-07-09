@@ -2,32 +2,96 @@ package engine.data.loader;
 
 import components.board.Board;
 import generated.ECNGame;
+import generated.ECNTeam;
 import team.team.Team;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameDataLoader {
-    ECNGame gameData;
+    private ECNGame gameData;
+
+    private int totalWords;
 
     public GameDataLoader(ECNGame gameData){
         this.gameData = gameData;
     }
+
+    public String getTxtFileName(){
+        return (String)gameData.getECNDictionaryFile();
+    }
+
+    public int getTotalWords() {
+        return totalWords;
+    }
+
+    public String getGameName(){
+        return gameData.getName();
+    }
     public Board initializeBoard(List<Team> teams){
-        List<String> regularWords = Arrays.asList(this.gameData.getECNWords().getECNGameWords().trim().split("\\s+"));
-       // regularWords.remove(0);
-        List<String> blackWords = Arrays.asList(this.gameData.getECNWords().getECNBlackWords().trim().split("\\s+"));
-      //  blackWords.remove(0);
+        //List<String> regularWords = Arrays.asList(this.gameData.getECNWords().getECNGameWords().trim().split("\\s+"));
+        List<String> gameWordsWithDups = uploadWordsDictionary();
+
+        Set<String> gameWordsWithoutDups = new HashSet<>(gameWordsWithDups);
+        totalWords = gameWordsWithoutDups.size();
+
+        List<String> gameWords = new ArrayList<>(gameWordsWithoutDups);
+
         int regularWordsAmount = gameData.getECNBoard().getCardsCount();
         int blackWordsAmount = gameData.getECNBoard().getBlackCardsCount();
+
+        List<String> regularWords = getRandomStringsAndRemoveFromOriginal(gameWords,regularWordsAmount);
+        List<String> blackWords = getRandomStringsAndRemoveFromOriginal(gameWords, blackWordsAmount);
+
+
         int rows = gameData.getECNBoard().getECNLayout().getRows();
         int cols = gameData.getECNBoard().getECNLayout().getColumns();
         return new Board(regularWords,blackWords,regularWordsAmount,blackWordsAmount,rows,cols,teams);
     }
 
+    private List<String> getRandomStringsAndRemoveFromOriginal(List<String> originalList, int count) {
+        // Make a copy of the original list to shuffle
+        List<String> copyList = new ArrayList<>(originalList);
+
+        // Shuffle the copy list
+        Collections.shuffle(copyList, new Random());
+
+        // Get a sublist of the desired size
+        List<String> randomList = new ArrayList<>(copyList.subList(0, Math.min(count, copyList.size())));
+
+        // Remove the selected random strings from the original list
+        originalList.removeAll(randomList);
+
+        return randomList;
+    }
+
+    private List<String> uploadWordsDictionary(){
+        String fileName = (String)gameData.getECNDictionaryFile();
+        String content = loadFileToString(fileName).replaceAll("[@#$%^&*()_,.?!-]","");
+        String[] wordsArray = content.split("\\s+");
+        return Arrays.stream(wordsArray)
+                .collect(Collectors.toList());
+
+    }
+    private String loadFileToString(String filename) {
+        try {
+            return new String(Files.readAllBytes(Paths.get(filename)));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public List<Team> initializeTeams(){
         List<Team> teams = new ArrayList<>();
-
-        teams.add(new Team(gameData.getECNTeam1().getName(), gameData.getECNTeam1().getCardsCount()));
-        teams.add(new Team(gameData.getECNTeam2().getName(), gameData.getECNTeam2().getCardsCount()));
+        for(ECNTeam team: gameData.getECNTeams().getECNTeam()){
+            teams.add(new Team(team.getName(), team.getCardsCount(), team.getGuessers(), team.getDefiners()));
+        }
+       /* teams.add(new Team(gameData.getECNTeam1().getName(), gameData.getECNTeam1().getCardsCount()));
+        teams.add(new Team(gameData.getECNTeam2().getName(), gameData.getECNTeam2().getCardsCount()));*/
 
         return teams;
     }

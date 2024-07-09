@@ -1,25 +1,52 @@
 package engine.data.validators;
 
-import engine.data.exception.CardCountException;
-import engine.data.exception.InsufficientTableSizeException;
-import engine.data.exception.TeamCardLimitExceededException;
-import engine.data.exception.TeamNamesNotUniqueException;
+import engine.data.exception.*;
 import generated.ECNGame;
-import generated.ECNTeam1;
-import generated.ECNTeam2;
+import generated.ECNTeam;
 
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+
 public class Validators {
+    public static String loadFileToString(String filename) {
+        try {
+            return new String(Files.readAllBytes(Paths.get(filename)));
+        } catch (RuntimeException e) {
+            throw new TextFileNotFoundException("The text file for the game words not found.");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void validateParticipants(ECNGame gameInfo){
+        int guessersAmount, definersAmount;
+        for(ECNTeam team: gameInfo.getECNTeams().getECNTeam()){
+            guessersAmount = team.getGuessers();
+            definersAmount = team.getDefiners();
+
+            if(guessersAmount < 1 || definersAmount < 1){
+                throw new ZeroParticipantsException("Can't Play without guessers or definers.");
+            }
+        }
+    }
+
     /**
      * Validates that the number of cards on the board does not exceed the number of available game words.
      *
      * @param gameInfo The game information containing all relevant data structures.
      * @throws CardCountException If the number of cards exceeds the number of available words.
      */
-    public static void validateCardCounts(ECNGame gameInfo) throws RuntimeException {
+    public static void validateCardCounts(ECNGame gameInfo) {
         int cardsCount = gameInfo.getECNBoard().getCardsCount();
-        long availableWordsCount = Arrays.stream(Optional.ofNullable(gameInfo.getECNWords().getECNGameWords())
+        String txtFileName = (String)gameInfo.getECNDictionaryFile();
+        String words = loadFileToString(txtFileName);
+        long availableWordsCount = Arrays.stream(Optional.ofNullable(words)
                         .orElse("").split(" "))
                 .filter(word -> !word.isEmpty() && !word.equals("\n"))
                 .distinct()
@@ -39,7 +66,9 @@ public class Validators {
      */
     public static void validateBlackCardCounts(ECNGame gameInfo) throws RuntimeException {
         int blackCardsCount = gameInfo.getECNBoard().getBlackCardsCount();
-        long availableBlackWordsCount = Arrays.stream(Optional.ofNullable(gameInfo.getECNWords().getECNBlackWords())
+        String txtFileName = (String)gameInfo.getECNDictionaryFile();
+        String words = loadFileToString(txtFileName);
+        long availableBlackWordsCount = Arrays.stream(Optional.ofNullable(words)
                         .orElse("").split(" "))
                 .filter(word -> !word.isEmpty() && !word.equals("\n"))
                 .distinct()
@@ -59,8 +88,14 @@ public class Validators {
      */
     public static void validateTeamTotalCardAmount(ECNGame gameInfo) throws RuntimeException {
         int cardsCount = gameInfo.getECNBoard().getCardsCount();
-        int teamsTotalCardAmount = Optional.ofNullable(gameInfo.getECNTeam1()).map(ECNTeam1::getCardsCount).orElse(0) +
-                Optional.ofNullable(gameInfo.getECNTeam2()).map(ECNTeam2::getCardsCount).orElse(0);
+        int teamsTotalCardAmount = 0;
+
+       /* int teamsTotalCardAmount = Optional.ofNullable(gameInfo.getECNTeam1()).map(ECNTeam1::getCardsCount).orElse(0) +
+                                    Optional.ofNullable(gameInfo.getECNTeam2()).map(ECNTeam2::getCardsCount).orElse(0);*/
+
+        for(ECNTeam team : gameInfo.getECNTeams().getECNTeam()){
+            teamsTotalCardAmount += Optional.ofNullable(team).map(ECNTeam::getCardsCount).orElse(0);
+        }
 
         if (teamsTotalCardAmount > cardsCount) {
             throw new TeamCardLimitExceededException("The combined total card amount of the teams (" + teamsTotalCardAmount +
@@ -93,12 +128,23 @@ public class Validators {
      * @throws TeamNamesNotUniqueException If both teams have the same name.
      */
     public static void validateTeamNames(ECNGame gameInfo) throws RuntimeException {
-        String team1Name = Optional.ofNullable(gameInfo.getECNTeam1()).map(ECNTeam1::getName).orElse("");
-        String team2Name = Optional.ofNullable(gameInfo.getECNTeam2()).map(ECNTeam2::getName).orElse("");
+       /* String team1Name = Optional.ofNullable(gameInfo.getECNTeam1()).map(ECNTeam1::getName).orElse("");
+        String team2Name = Optional.ofNullable(gameInfo.getECNTeam2()).map(ECNTeam2::getName).orElse("");*/
 
-        if (team1Name.equals(team2Name)) {
+        Set<String> seenNames = new HashSet<>();
+        for(ECNTeam team : gameInfo.getECNTeams().getECNTeam()){
+            if(seenNames.contains(team.getName())) {
+                throw new TeamNamesNotUniqueException("The names of the two teams are identical, which is not allowed." +
+                        " Both teams are named '" + team.getName() + "'.");
+            }
+            else {
+                seenNames.add(team.getName());
+            }
+        }
+
+       /* if (team1Name.equals(team2Name)) {
             throw new TeamNamesNotUniqueException("The names of the two teams are identical, which is not allowed." +
                     " Both teams are named '" + team1Name + "'.");
-        }
+        }*/
     }
 }

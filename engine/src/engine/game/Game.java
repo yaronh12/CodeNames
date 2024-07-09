@@ -11,16 +11,30 @@ import team.turn.Guess;
 
 public class Game {
 
+    private String gameName;
+    private String txtFileName;
+
     private List<Team> teams;
-   // private int currentTeamIndex;
     private TeamsInfo teamsInfo;
     private Board board;
     private Team winningTeam;
+    private int totalWordsInFile;
 
     public Game(GameDataLoader gameGameDataLoader){
+        this.txtFileName = gameGameDataLoader.getTxtFileName();
+        this.gameName = gameGameDataLoader.getGameName();
         this.teams = gameGameDataLoader.initializeTeams();
         this.teamsInfo = new TeamsInfo(this.teams);
         this.board = gameGameDataLoader.initializeBoard(this.teams);
+        this.totalWordsInFile = gameGameDataLoader.getTotalWords();
+    }
+
+    public int getTotalWordsInFile() {
+        return totalWordsInFile;
+    }
+
+    public String getTxtFileName() {
+        return txtFileName;
     }
     /*
     public Game(List<String> teamNames, List<Integer> teamCardNumber, List<String> regularWords, List<String> blackWords,
@@ -32,8 +46,10 @@ public class Game {
     }
      */
 
-
-    //useless func foe ex1 there are only two teams
+    public String getGameName() {
+        return gameName;
+    }
+//useless func foe ex1 there are only two teams
    /* public void setTeams(List<String> teamNames, List<Integer> teamCardNumber){
         teams = new ArrayList<>();
         int howManyTeams = teamNames.size();

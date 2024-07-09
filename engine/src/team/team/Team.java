@@ -5,12 +5,24 @@ public class Team {
     private final int cardsAmount;
     private int score;
     private int turnCounter;
+    private int guessersAmount;
+    private int definersAmount;
 
-    public Team(String name, int cardsAmount){
+    public int getGuessersAmount() {
+        return guessersAmount;
+    }
+
+    public int getDefinersAmount() {
+        return definersAmount;
+    }
+
+    public Team(String name, int cardsAmount, int guessersAmount, int definersAmount){
         this.name = name;
         this.cardsAmount = cardsAmount;
         this.score = 0;
         this.turnCounter = 0;
+        this.definersAmount = definersAmount;
+        this.guessersAmount = guessersAmount;
     }
 
     public String getTeamName(){

@@ -11,6 +11,7 @@ import java.util.List;
 import engine.data.loader.GameDataLoader;
 import components.card.Card;
 import engine.game.Game;
+import generated.ECNTeam;
 import team.turn.Guess;
 import team.team.Team;
 import team.team.TeamsInfo;
@@ -40,26 +41,28 @@ public class EngineImpl implements Engine {
 
     }
 
-    private void xmlContentValidator(ECNGame gameInfo) throws RuntimeException{
+    private void xmlContentValidator(ECNGame gameInfo) throws RuntimeException, FileNotFoundException {
         validateCardCounts(gameInfo);
         validateBlackCardCounts(gameInfo);
         validateTeamTotalCardAmount(gameInfo);
         validateBoardSize(gameInfo);
         validateTeamNames(gameInfo);
+        validateParticipants(gameInfo);
     }
 
     public void loadGameData(){
         GameDataLoader gameDataLoader = new GameDataLoader(this.gameDataFile);
         activeGame = new Game(gameDataLoader);
+
     }
-    @Override
+  /*  @Override
    public List<String> getRegularWords(){
         return Arrays.asList(this.gameDataFile.getECNWords().getECNGameWords().split(" "));
    }
     @Override
    public List<String> getBlackWords(){
        return Arrays.asList(this.gameDataFile.getECNWords().getECNBlackWords().split(" "));
-   }
+   }*/
     @Override
    public int getHowManyRegularWordsInGame(){
        return this.gameDataFile.getECNBoard().getCardsCount();
@@ -80,8 +83,11 @@ public class EngineImpl implements Engine {
     @Override
     public List<Team> getTeams(){
         List<Team> teams = new ArrayList<>();
-        teams.add(new Team(this.gameDataFile.getECNTeam1().getName(),this.gameDataFile.getECNTeam1().getCardsCount()));
-        teams.add(new Team(this.gameDataFile.getECNTeam2().getName(),this.gameDataFile.getECNTeam2().getCardsCount()));
+        for(ECNTeam team: gameDataFile.getECNTeams().getECNTeam()){
+            teams.add(new Team(team.getName(),team.getCardsCount(), team.getGuessers(), team.getDefiners()));
+        }
+       /* teams.add(new Team(this.gameDataFile.getECNTeam1().getName(),this.gameDataFile.getECNTeam1().getCardsCount()));
+        teams.add(new Team(this.gameDataFile.getECNTeam2().getName(),this.gameDataFile.getECNTeam2().getCardsCount()));*/
         return teams;
     }
     @Override
@@ -129,6 +135,23 @@ public class EngineImpl implements Engine {
 
     public TeamsInfo getTeamsInfo(){
        return this.activeGame.getTeamsInfo();
+    }
+
+    @Override
+    public String toString(){
+        String res = null;
+        res += activeGame.getGameName()+"\n";
+        res += activeGame.getBoard().getRows() + " X " + activeGame.getBoard().getCols() + "\n";
+        res += activeGame.getTxtFileName() + " with " + activeGame.getTotalWordsInFile() + " words.\n";
+        res += getHowManyRegularWordsInGame() + " regular words, and " + getHowManyBlackWordsInGame() + " black words.\n";
+        for(Team team: activeGame.getTeams()){
+            res += "--------TEAM--------";
+            res += "\ta. " + team.getTeamName() +
+                    "\n\tb. " + team.getCardAmount() +
+                    "\n\t c. " + team.getDefinersAmount()+
+                    "\n\td. " + team.getGuessersAmount() + "\n";
+        }
+        return res;
     }
 
 

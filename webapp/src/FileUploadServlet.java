@@ -1,3 +1,4 @@
+import engine.engine.EngineImpl;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -12,6 +13,7 @@ import javax.xml.bind.JAXBException;
 import java.io.*;
 
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.InvalidPathException;
 import java.util.Scanner;
 
@@ -29,16 +31,21 @@ public class FileUploadServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         res.setContentType("text/plain");
-
         Part filePart = req.getPart("file");
 
         if(filePart != null){
-            StringBuilder fileContent = new StringBuilder();
-            fileContent.append(readFromInputStream(filePart.getInputStream()));
-            String fileString = fileContent.toString();
+           /* StringBuilder fileContent = new StringBuilder();
+            fileContent.append(filePart.getInputStream());
+            String fileString = fileContent.toString();*/
+            String fileString = readFromInputStream(filePart.getInputStream());
+            //System.out.println(fileString);
+            //System.out.println(fileString);
             try {
+
+                //System.out.println(fileString);
                 engine.readXmlFile(fileString);
-                res.getWriter().write(engine.getBoardRows() + "X" + engine.getBoardCols());
+                engine.loadGameData();
+                res.getWriter().write("file loaded successfully!");
             } catch (FileNotFoundException e) {
                 res.getWriter().write("The file was not found. Please check the path and try again.");
             } catch (InvalidPathException e) {
@@ -55,8 +62,24 @@ public class FileUploadServlet extends HttpServlet {
         }
     }
 
-    private String readFromInputStream(InputStream inputStream) {
-        return new Scanner(inputStream).useDelimiter("\\Z").next();
+/*    public static String readFromInputStream(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
+        }
+        return result.toString(StandardCharsets.UTF_8.name());
+    }*/
+
+    private String readFromInputStream(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
+        }
+        return result.toString(StandardCharsets.UTF_8.name());
     }
 }
 

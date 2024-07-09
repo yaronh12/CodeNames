@@ -14,9 +14,9 @@ public interface Engine {
     void readXmlFile(String xmlName) throws FileNotFoundException, JAXBException;
 
     void loadGameData();
-
+/*
     List<String> getRegularWords();
-    List<String> getBlackWords();
+    List<String> getBlackWords();*/
 
     int getHowManyRegularWordsInGame();
     int getHowManyBlackWordsInGame();
@@ -45,6 +45,8 @@ public interface Engine {
     TeamsInfo getTeamsInfo();
 
 
+    //function for debug!!!!!
+    String toString();
 
 
 }

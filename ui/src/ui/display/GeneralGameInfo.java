@@ -48,8 +48,8 @@ public class GeneralGameInfo {
     public static void printGameData(Engine game) {
         System.out.println("--------------------------");
         System.out.println("Game Details:");
-        System.out.println("There are " + game.getRegularWords().size() + " words to choose from.");
-        System.out.println("There are " + game.getBlackWords().size() + " black words to choose from.");
+        /*System.out.println("There are " + game.getRegularWords().size() + " words to choose from.");
+        System.out.println("There are " + game.getBlackWords().size() + " black words to choose from.");*/
         System.out.println("We'll play " + game.getHowManyRegularWordsInGame() + " regular words and " + game.getHowManyBlackWordsInGame() + " black words.");
         for (Team team : game.getTeams()) {
             System.out.println(team);

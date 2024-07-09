@@ -11,13 +11,13 @@ public class Board {
     private final int cols;
 
     public Board(List<String> regularWords, List<String> blackWords, int regularWordsAmountForGame, int blackWordsAmountForGame, int boardRows, int boardCols, List<Team> teams) {
-        // Convert List to Set to remove duplicates
+        /*// Convert List to Set to remove duplicates
         Set<String> WithoutDuplicates = new HashSet<>(regularWords);
         // Convert Set back to List
-        List<String> wordWithoutDuplicates = new ArrayList<>(WithoutDuplicates);
+        List<String> wordWithoutDuplicates = new ArrayList<>(WithoutDuplicates);*/
 
-        chooseRegularWordForTeams(wordWithoutDuplicates, teams);
-        chooseRegularWord(wordWithoutDuplicates,regularWordsAmountForGame - totalTeamsCardAmount(teams));
+        chooseRegularWordForTeams(regularWords, teams);
+        chooseRegularWord(regularWords,regularWordsAmountForGame - totalTeamsCardAmount(teams));
         chooseBlackWords(blackWords, regularWords, blackWordsAmountForGame);
 
         Collections.shuffle(cards);
@@ -38,6 +38,14 @@ public class Board {
         for ( int i = 0; i < numOfWordsLeft; i++) {
             cards.add(new Card(regularWords.remove(0), "", false));
         }
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getCols() {
+        return cols;
     }
 
     private void chooseBlackWords(List<String> blackWords, List<String> regularWord, int blackWordsAmountForGame){
