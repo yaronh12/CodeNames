@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,20 +31,22 @@ public class EngineImpl implements Engine {
     private Game activeGame;
     private ECNGame gameDataFile;
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "generated";
+
+    private String txtFileLocation;
     public void readXmlFile(String xmlName) throws FileNotFoundException, JAXBException, RuntimeException {
 
             InputStream inputStream = new FileInputStream(new File(xmlName));
             JAXBContext jc = JAXBContext.newInstance(JAXB_XML_GAME_PACKAGE_NAME);
             Unmarshaller u = jc.createUnmarshaller();
             gameDataFile = (ECNGame) u.unmarshal(inputStream);
-
-            xmlContentValidator(gameDataFile);
+            txtFileLocation = Paths.get(xmlName).getParent().resolve(gameDataFile.getECNDictionaryFile()).toString();
+            xmlContentValidator(gameDataFile, txtFileLocation);
 
     }
 
-    private void xmlContentValidator(ECNGame gameInfo) throws RuntimeException, FileNotFoundException {
-        validateCardCounts(gameInfo);
-        validateBlackCardCounts(gameInfo);
+    private void xmlContentValidator(ECNGame gameInfo, String txtFileLocation) throws RuntimeException, FileNotFoundException {
+        validateCardCounts(gameInfo, txtFileLocation);
+        validateBlackCardCounts(gameInfo, txtFileLocation);
         validateTeamTotalCardAmount(gameInfo);
         validateBoardSize(gameInfo);
         validateTeamNames(gameInfo);
@@ -52,6 +55,7 @@ public class EngineImpl implements Engine {
 
     public void loadGameData(){
         GameDataLoader gameDataLoader = new GameDataLoader(this.gameDataFile);
+        gameDataLoader.setTxtFileLocation(txtFileLocation);
         activeGame = new Game(gameDataLoader);
 
     }
@@ -139,14 +143,14 @@ public class EngineImpl implements Engine {
 
     @Override
     public String toString(){
-        String res = null;
+        String res = "";
         res += activeGame.getGameName()+"\n";
         res += activeGame.getBoard().getRows() + " X " + activeGame.getBoard().getCols() + "\n";
         res += activeGame.getTxtFileName() + " with " + activeGame.getTotalWordsInFile() + " words.\n";
         res += getHowManyRegularWordsInGame() + " regular words, and " + getHowManyBlackWordsInGame() + " black words.\n";
         for(Team team: activeGame.getTeams()){
             res += "--------TEAM--------";
-            res += "\ta. " + team.getTeamName() +
+            res += "\n\ta. " + team.getTeamName() +
                     "\n\tb. " + team.getCardAmount() +
                     "\n\t c. " + team.getDefinersAmount()+
                     "\n\td. " + team.getGuessersAmount() + "\n";

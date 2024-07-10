@@ -16,6 +16,8 @@ public class GameDataLoader {
 
     private int totalWords;
 
+    private String txtFileLocation;
+
     public GameDataLoader(ECNGame gameData){
         this.gameData = gameData;
     }
@@ -24,8 +26,16 @@ public class GameDataLoader {
         return (String)gameData.getECNDictionaryFile();
     }
 
+    public String getTxtFileLocation() {
+        return txtFileLocation;
+    }
+
     public int getTotalWords() {
         return totalWords;
+    }
+
+    public void setTxtFileLocation(String txtFileLocation) {
+        this.txtFileLocation = txtFileLocation;
     }
 
     public String getGameName(){
@@ -69,8 +79,8 @@ public class GameDataLoader {
     }
 
     private List<String> uploadWordsDictionary(){
-        String fileName = (String)gameData.getECNDictionaryFile();
-        String content = loadFileToString(fileName).replaceAll("[@#$%^&*()_,.?!-]","");
+        //String fileName = (String)gameData.getECNDictionaryFile();
+        String content = loadFileToString(txtFileLocation).replaceAll("[@#$%^&*()_,.?!-]","");
         String[] wordsArray = content.split("\\s+");
         return Arrays.stream(wordsArray)
                 .collect(Collectors.toList());

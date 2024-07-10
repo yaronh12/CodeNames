@@ -34,18 +34,13 @@ public class FileUploadServlet extends HttpServlet {
         Part filePart = req.getPart("file");
 
         if(filePart != null){
-           /* StringBuilder fileContent = new StringBuilder();
-            fileContent.append(filePart.getInputStream());
-            String fileString = fileContent.toString();*/
-            String fileString = readFromInputStream(filePart.getInputStream());
-            //System.out.println(fileString);
-            //System.out.println(fileString);
-            try {
 
-                //System.out.println(fileString);
+            String fileString = readFromInputStream(filePart.getInputStream());
+
+            try {
                 engine.readXmlFile(fileString);
                 engine.loadGameData();
-                res.getWriter().write("file loaded successfully!");
+                res.getWriter().write("file loaded successfully!\n");
             } catch (FileNotFoundException e) {
                 res.getWriter().write("The file was not found. Please check the path and try again.");
             } catch (InvalidPathException e) {
@@ -62,15 +57,6 @@ public class FileUploadServlet extends HttpServlet {
         }
     }
 
-/*    public static String readFromInputStream(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream result = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = inputStream.read(buffer)) != -1) {
-            result.write(buffer, 0, length);
-        }
-        return result.toString(StandardCharsets.UTF_8.name());
-    }*/
 
     private String readFromInputStream(InputStream inputStream) throws IOException {
         ByteArrayOutputStream result = new ByteArrayOutputStream();

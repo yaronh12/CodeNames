@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ECN-Game name="tough love" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../Downloads/CodeNames-v2.xsd">
+	<ECN-Dictionary-File>moby dick.txt</ECN-Dictionary-File>
+	<ECN-Board cards-count="60" black-cards-count="4">
+		<ECN-Layout rows="15" columns="4"/>
+	</ECN-Board>
+	<ECN-Teams>
+		<ECN-Team name="T1" cards-count="8" definers="3" guessers="4"/>
+		<ECN-Team name="T2" cards-count="6" definers="2" guessers="3"/>
+		<ECN-Team name="T3" cards-count="6" definers="2" guessers="2"/>
+		<ECN-Team name="T4" cards-count="4" definers="1" guessers="1"/>
+	</ECN-Teams>
+</ECN-Game>

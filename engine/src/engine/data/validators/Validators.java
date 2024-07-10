@@ -17,10 +17,8 @@ public class Validators {
     public static String loadFileToString(String filename) {
         try {
             return new String(Files.readAllBytes(Paths.get(filename)));
-        } catch (RuntimeException e) {
-            throw new TextFileNotFoundException("The text file for the game words not found.");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new TextFileNotFoundException("The text file for the game words not found.");
         }
     }
 
@@ -42,10 +40,10 @@ public class Validators {
      * @param gameInfo The game information containing all relevant data structures.
      * @throws CardCountException If the number of cards exceeds the number of available words.
      */
-    public static void validateCardCounts(ECNGame gameInfo) {
+    public static void validateCardCounts(ECNGame gameInfo, String txtFileLocation) {
         int cardsCount = gameInfo.getECNBoard().getCardsCount();
-        String txtFileName = (String)gameInfo.getECNDictionaryFile();
-        String words = loadFileToString(txtFileName);
+        //String txtFileName = (String)gameInfo.getECNDictionaryFile();
+        String words = loadFileToString(txtFileLocation);
         long availableWordsCount = Arrays.stream(Optional.ofNullable(words)
                         .orElse("").split(" "))
                 .filter(word -> !word.isEmpty() && !word.equals("\n"))
@@ -64,10 +62,10 @@ public class Validators {
      * @param gameInfo The game information containing all relevant data structures.
      * @throws CardCountException If the number of black cards exceeds the number of available black words.
      */
-    public static void validateBlackCardCounts(ECNGame gameInfo) throws RuntimeException {
+    public static void validateBlackCardCounts(ECNGame gameInfo, String txtFileLocation) throws RuntimeException {
         int blackCardsCount = gameInfo.getECNBoard().getBlackCardsCount();
-        String txtFileName = (String)gameInfo.getECNDictionaryFile();
-        String words = loadFileToString(txtFileName);
+        //String txtFileName = (String)gameInfo.getECNDictionaryFile();
+        String words = loadFileToString(txtFileLocation);
         long availableBlackWordsCount = Arrays.stream(Optional.ofNullable(words)
                         .orElse("").split(" "))
                 .filter(word -> !word.isEmpty() && !word.equals("\n"))

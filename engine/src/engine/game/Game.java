@@ -12,6 +12,8 @@ import team.turn.Guess;
 public class Game {
 
     private String gameName;
+    private String txtFileLocation;
+
     private String txtFileName;
 
     private List<Team> teams;
@@ -22,6 +24,7 @@ public class Game {
 
     public Game(GameDataLoader gameGameDataLoader){
         this.txtFileName = gameGameDataLoader.getTxtFileName();
+        this.txtFileLocation = gameGameDataLoader.getTxtFileLocation();
         this.gameName = gameGameDataLoader.getGameName();
         this.teams = gameGameDataLoader.initializeTeams();
         this.teamsInfo = new TeamsInfo(this.teams);
@@ -33,7 +36,10 @@ public class Game {
         return totalWordsInFile;
     }
 
-    public String getTxtFileName() {
+    public String getTxtFileLocation() {
+        return txtFileLocation;
+    }
+    public String getTxtFileName(){
         return txtFileName;
     }
     /*
