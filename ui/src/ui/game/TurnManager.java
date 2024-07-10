@@ -30,12 +30,12 @@ public class TurnManager {
     public static boolean playTeamTurn(Engine game, AtomicInteger guesserTurnIndex) {
         Scanner in = new Scanner(System.in);
 
-        displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.SPYMASTER);
-        System.out.println(game.getCurrentTeam().getTeamName() + "'s Turn!");
-        System.out.println("Your score is " + game.getCurrentTeam().getScore() + " / " + game.getCurrentTeam().getCardAmount());
+        displayBoard(game.getBoardState(0), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.SPYMASTER);
+        System.out.println(game.getCurrentTeam(0).getTeamName() + "'s Turn!");
+        System.out.println("Your score is " + game.getCurrentTeam(0).getScore() + " / " + game.getCurrentTeam(0).getCardAmount());
 
         Clue clue = getSpyMasterClue(in, game);
-        System.out.println("Hello " + game.getCurrentTeam().getTeamName() + "'s guessers! your clue is " + clue.getClueWord() + " and you have " + clue.getNumOfWordToGuess() + " words to guess.");
+        System.out.println("Hello " + game.getCurrentTeam(0).getTeamName() + "'s guessers! your clue is " + clue.getClueWord() + " and you have " + clue.getNumOfWordToGuess() + " words to guess.");
         System.out.println("if you want to pass this turn, enter 0.");
 
         guesserTurnIndex.set(0);
@@ -45,11 +45,11 @@ public class TurnManager {
             Guess guess = askForGuess(guesserTurnIndex.get() + 1, game);
             correctGuess = giveGuessResponse(guess, guesserTurnIndex);
 
-            if (game.isGameOver(guess))
+            if (game.isGameOver(guess,0))
                 return true;
         }
 
-        System.out.println("Your updated score is: " + game.getCurrentTeam().getScore() + " / " + game.getCurrentTeam().getCardAmount());
+        System.out.println("Your updated score is: " + game.getCurrentTeam(0).getScore() + " / " + game.getCurrentTeam(0).getCardAmount());
         return false;
     }
 
@@ -61,10 +61,10 @@ public class TurnManager {
      * @return Guess The guess object representing the player's guess.
      */
     private static Guess askForGuess(int turn, Engine game) {
-        displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.GUESSER);
+        displayBoard(game.getBoardState(0), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.GUESSER);
         System.out.println("Guess #" + turn + ": ");
-        int guessIndex = getValidInteger(0, game.getBoardState().size());
-        return game.makeGuess(guessIndex - 1);
+        int guessIndex = getValidInteger(0, game.getBoardState(0).size());
+        return game.makeGuess(guessIndex - 1,0);
     }
 
     /**
@@ -119,21 +119,21 @@ public class TurnManager {
         int amountOfWordsToGuess;
         boolean clueWordIsValid;
 
-        System.out.println(game.getCurrentTeam().getTeamName() + "'s spymaster, please give a clue. To confirm press Enter.");
+        System.out.println(game.getCurrentTeam(0).getTeamName() + "'s spymaster, please give a clue. To confirm press Enter.");
 
         do {
             System.out.println("Please enter a clue word:");
             clueWord = in.nextLine();
             clueWordIsValid =/* !ClueValidator.isClueContainSpaces(clueWord) &&*/
-                    !ClueValidator.isClueWordOnBoard(clueWord, game.getBoardState()) &&
-                    !ClueValidator.isClueWordSubStringOfWordOnBoard(clueWord, game.getBoardState());
+                    !ClueValidator.isClueWordOnBoard(clueWord, game.getBoardState(0)) &&
+                    !ClueValidator.isClueWordSubStringOfWordOnBoard(clueWord, game.getBoardState(0));
             if (!clueWordIsValid) {
                 System.out.println("Error: The clue word must not contain spaces, cannot match or be part of any word on the board.");
             }
         } while (!clueWordIsValid);
 
         System.out.println("Enter how many guesses: ");
-        amountOfWordsToGuess = getValidInteger(1, game.getCurrentTeam().getCardAmount() - game.getCurrentTeam().getScore());
+        amountOfWordsToGuess = getValidInteger(1, game.getCurrentTeam(0).getCardAmount() - game.getCurrentTeam(0).getScore());
         return new Clue(clueWord, amountOfWordsToGuess);
     }
 }

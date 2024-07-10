@@ -8,10 +8,7 @@ import generated.ECNTeam;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class Validators {
     public static String loadFileToString(String filename) {
@@ -31,6 +28,12 @@ public class Validators {
             if(guessersAmount < 1 || definersAmount < 1){
                 throw new ZeroParticipantsException("Can't Play without guessers or definers.");
             }
+        }
+    }
+
+    public static void validateGameName(ECNGame gameInfo, List<String> names){
+        if(names.contains(gameInfo.getName())){
+            throw new GameNameAlreadyExistException("Game name already exist in system.");
         }
     }
 

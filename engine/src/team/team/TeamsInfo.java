@@ -8,6 +8,8 @@ import java.util.List;
 public class TeamsInfo {
     private List<Team> teams;
     private int currentTeamIndex;
+
+
     public TeamsInfo(List<Team> teams){
         this.teams = teams;
         currentTeamIndex = 0;

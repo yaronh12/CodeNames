@@ -1,3 +1,4 @@
+import com.google.gson.Gson;
 import engine.engine.Engine;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,9 +21,13 @@ public class GamesDetailsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res){
-        res.setContentType("text/plain");
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
+        String jsonResponse = gson.toJson(engine.getAllGamesList());
         try {
-            res.getWriter().write(engine.toString());
+            res.getWriter().write(jsonResponse);
+           // res.getWriter().write(engine.getGamesDetails());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

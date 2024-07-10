@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import engine.data.loader.GameDataLoader;
 import components.card.Card;
@@ -28,7 +29,7 @@ public class EngineImpl implements Engine {
     private Game activeGame = new Game(this.gameData.getTeamsNames(), this.gameData.getHowManyWordsForEachTeam(), this.getRegularWords(),
                                        this.getBlackWords(), this.getHowManyRegularWordsInGame(),
                                         this.getHowManyBlackWordsInGame(), this.getBoardRows(),this.getBoardCols());*/
-    private Game activeGame;
+    private List<Game> activeGames = new ArrayList<>();
     private ECNGame gameDataFile;
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "generated";
 
@@ -45,6 +46,9 @@ public class EngineImpl implements Engine {
     }
 
     private void xmlContentValidator(ECNGame gameInfo, String txtFileLocation) throws RuntimeException, FileNotFoundException {
+        validateGameName(gameInfo, activeGames.stream()
+                                                .map(Game::getGameName)
+                                                .collect(Collectors.toList()));
         validateCardCounts(gameInfo, txtFileLocation);
         validateBlackCardCounts(gameInfo, txtFileLocation);
         validateTeamTotalCardAmount(gameInfo);
@@ -56,7 +60,7 @@ public class EngineImpl implements Engine {
     public void loadGameData(){
         GameDataLoader gameDataLoader = new GameDataLoader(this.gameDataFile);
         gameDataLoader.setTxtFileLocation(txtFileLocation);
-        activeGame = new Game(gameDataLoader);
+        activeGames.add(new Game(gameDataLoader));
 
     }
   /*  @Override
@@ -95,37 +99,47 @@ public class EngineImpl implements Engine {
         return teams;
     }
     @Override
-    public Team getCurrentTeam(){
-       return this.activeGame.getTeams().get(this.activeGame.getCurrentTeamIndex());
+    public Team getCurrentTeam(int gameIndex){
+      // return this.activeGame.getTeams().get(this.activeGame.getCurrentTeamIndex());
+       return this.activeGames.get(gameIndex)
+               .getTeams()
+               .get(this.activeGames.get(gameIndex).getCurrentTeamIndex());
     }
 
     @Override
-    public List<Card> getBoardState(){
-        return this.activeGame.getBoard().getCards();
+    public List<Card> getBoardState(int gameIndex){
+        //return this.activeGame.getBoard().getCards();
+        return this.activeGames.get(gameIndex).getBoard().getCards();
     }
 
     @Override
-    public void passTurn(){
-       this.activeGame.passTurn();
+    public void passTurn(int gameIndex){
+       //this.activeGame.passTurn();
+       this.activeGames.get(gameIndex).passTurn();
     }
 
-    public Guess makeGuess(int guess){
-       return this.activeGame.makeGuess(guess);
+    @Override
+    public Guess makeGuess(int guess, int gameIndex){
+       //return this.activeGame.makeGuess(guess);
+       return this.activeGames.get(gameIndex).makeGuess(guess);
     }
 
-    public boolean isGameOver(Guess guess){
+    public boolean isGameOver(Guess guess, int gameIndex){
+        Game currGame = this.activeGames.get(gameIndex);
         if(guess.isGuessedWordBlack()){
             // picking the other team to win in case of black word
             // ask aviad what to do in case of multiple teams
-            this.activeGame.passTurn();
-            this.activeGame.setWinningTeam(this.activeGame.getTeams().get(this.activeGame.getCurrentTeamIndex()));
+            //this.activeGame.passTurn();
+            currGame.passTurn();
+            //this.activeGame.setWinningTeam(this.activeGame.getTeams().get(this.activeGame.getCurrentTeamIndex()));
+            currGame.setWinningTeam(currGame.getTeams().get(currGame.getCurrentTeamIndex()));
             return true;
         }
 
 
-        for(Team team: this.activeGame.getTeams()){
+        for(Team team: currGame.getTeams()){
             if(team.getCardAmount() == team.getScore()){
-                this.activeGame.setWinningTeam(team);
+                currGame.setWinningTeam(team);
                 return true;
             }
         }
@@ -133,29 +147,22 @@ public class EngineImpl implements Engine {
 
     }
 
-    public Team getWinningTeam(){
-       return this.activeGame.getWinningTeam();
-    }
-
-    public TeamsInfo getTeamsInfo(){
-       return this.activeGame.getTeamsInfo();
+    @Override
+    public Team getWinningTeam(int gameIndex){
+       //return this.activeGame.getWinningTeam();
+       return this.activeGames.get(gameIndex).getWinningTeam();
     }
 
     @Override
-    public String toString(){
-        String res = "";
-        res += activeGame.getGameName()+"\n";
-        res += activeGame.getBoard().getRows() + " X " + activeGame.getBoard().getCols() + "\n";
-        res += activeGame.getTxtFileName() + " with " + activeGame.getTotalWordsInFile() + " words.\n";
-        res += getHowManyRegularWordsInGame() + " regular words, and " + getHowManyBlackWordsInGame() + " black words.\n";
-        for(Team team: activeGame.getTeams()){
-            res += "--------TEAM--------";
-            res += "\n\ta. " + team.getTeamName() +
-                    "\n\tb. " + team.getCardAmount() +
-                    "\n\t c. " + team.getDefinersAmount()+
-                    "\n\td. " + team.getGuessersAmount() + "\n";
-        }
-        return res;
+    public TeamsInfo getTeamsInfo(int gameIndex){
+       //return this.activeGame.getTeamsInfo();
+       return this.activeGames.get(gameIndex).getTeamsInfo();
+    }
+
+
+    @Override
+    public List<Game> getAllGamesList() {
+        return activeGames;
     }
 
 

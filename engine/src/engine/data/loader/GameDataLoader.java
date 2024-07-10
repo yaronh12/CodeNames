@@ -18,6 +18,8 @@ public class GameDataLoader {
 
     private String txtFileLocation;
 
+
+
     public GameDataLoader(ECNGame gameData){
         this.gameData = gameData;
     }

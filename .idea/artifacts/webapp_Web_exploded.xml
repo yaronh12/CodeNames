@@ -8,6 +8,12 @@
           <element id="module-output" name="webapp" />
           <element id="module-output" name="engine" />
         </element>
+        <element id="directory" name="lib">
+          <element id="extracted-dir" path="$PROJECT_DIR$/../3rd party libs/gson-2.8.8-javadoc.jar" path-in-jar="/" />
+          <element id="extracted-dir" path="$PROJECT_DIR$/../3rd party libs/gson-2.8.8-sources.jar" path-in-jar="/" />
+          <element id="extracted-dir" path="$PROJECT_DIR$/../3rd party libs/gson-2.8.8.jar" path-in-jar="/" />
+          <element id="file-copy" path="$PROJECT_DIR$/../3rd party libs/gson-2.8.8.jar" />
+        </element>
       </element>
     </root>
   </artifact>

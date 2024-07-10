@@ -22,8 +22,8 @@ public class GeneralGameInfo {
      * @param game The game engine from which to retrieve game data.
      */
     public static void printActiveGameInfo(Engine game){
-        TeamsInfo teamsInfo = game.getTeamsInfo();
-        displayBoard(game.getBoardState(), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.SPYMASTER);
+        TeamsInfo teamsInfo = game.getTeamsInfo(0);
+        displayBoard(game.getBoardState(0), game.getBoardRows(), game.getBoardCols(), BoardPrinter.Role.SPYMASTER);
         List<String> teamNames = teamsInfo.getTeamNames();
         List<String> teamScores = teamsInfo.getTeamsCurrentScore();
         List<Integer> teamTurnCounter = teamsInfo.getTeamsTurnCounter();

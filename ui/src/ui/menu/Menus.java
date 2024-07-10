@@ -82,10 +82,10 @@ public class Menus {
                     if(isGameActive){
                         this.isGameOver = playTeamTurn(game, guesserTurnIndex);
                         if(isGameOver){
-                            System.out.println("The winning team is " + this.game.getWinningTeam().getTeamName() + "!!!");
+                            System.out.println("The winning team is " + this.game.getWinningTeam(0).getTeamName() + "!!!");
                             isGameActive = false;
                         }
-                        this.game.passTurn();
+                        this.game.passTurn(0);
                     }
                     else {
                         System.out.println("Goodbye!");
@@ -141,7 +141,7 @@ public class Menus {
             keepPlaying = startTurnMenu();
         }
         if(isGameOver){
-            System.out.println("The winning team is " + this.game.getWinningTeam().getTeamName() + "!!!");
+            System.out.println("The winning team is " + this.game.getWinningTeam(0).getTeamName() + "!!!");
             isGameActive = false;
         }
     }
@@ -152,7 +152,7 @@ public class Menus {
      */
     private boolean startTurnMenu(){
         System.out.println();
-        System.out.println(this.game.getCurrentTeam().getTeamName() + "'s Turn!");
+        System.out.println(this.game.getCurrentTeam(0).getTeamName() + "'s Turn!");
         System.out.println("Please select one of the following options:");
         System.out.println("1. Play your turn");
         System.out.println("2. Show Active Game Details");
@@ -162,7 +162,7 @@ public class Menus {
         switch(userChoice){
             case 1:
                 this.isGameOver = playTeamTurn(game, guesserTurnIndex);
-                this.game.passTurn();
+                this.game.passTurn(0);
                 break;
             case 2:
                 printActiveGameInfo(game);

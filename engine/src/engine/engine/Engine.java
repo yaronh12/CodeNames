@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import components.card.Card;
+import engine.game.Game;
 import team.team.Team;
 import team.team.TeamsInfo;
 import team.turn.Guess;
@@ -27,26 +28,26 @@ public interface Engine {
     List<Team> getTeams();
 
 
-    void passTurn();
+    void passTurn(int gameIndex);
 
-    List<Card> getBoardState();
+    List<Card> getBoardState(int gameIndex);
 
-    public Guess makeGuess(int guess);
+    public Guess makeGuess(int guess, int gameIndex);
 
   /*  void startGame();
     boolean isGameOver();
     void endGame();*/
 
-    Team getCurrentTeam();
+    Team getCurrentTeam(int gameIndex);
 
-    Team getWinningTeam();
-    boolean isGameOver(Guess guess);
+    Team getWinningTeam(int gameIndex);
+    boolean isGameOver(Guess guess, int gameIndex);
 
-    TeamsInfo getTeamsInfo();
+    TeamsInfo getTeamsInfo(int gameIndex);
 
 
-    //function for debug!!!!!
-    String toString();
+
+    List<Game> getAllGamesList();
 
 
 }

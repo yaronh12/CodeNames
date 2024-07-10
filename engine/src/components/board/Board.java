@@ -9,13 +9,16 @@ public class Board {
     private List<Card> cards = new ArrayList<>();
     private final int rows;
     private final int cols;
+    private int regularWordsAmount;
+    private int blackWordsAmount;
 
     public Board(List<String> regularWords, List<String> blackWords, int regularWordsAmountForGame, int blackWordsAmountForGame, int boardRows, int boardCols, List<Team> teams) {
         /*// Convert List to Set to remove duplicates
         Set<String> WithoutDuplicates = new HashSet<>(regularWords);
         // Convert Set back to List
         List<String> wordWithoutDuplicates = new ArrayList<>(WithoutDuplicates);*/
-
+        regularWordsAmount = regularWords.size();
+        blackWordsAmount = blackWords.size();
         chooseRegularWordForTeams(regularWords, teams);
         chooseRegularWord(regularWords,regularWordsAmountForGame - totalTeamsCardAmount(teams));
         chooseBlackWords(blackWords, regularWords, blackWordsAmountForGame);
@@ -24,6 +27,14 @@ public class Board {
 
         this.rows = boardRows;
         this.cols = boardCols;
+    }
+
+    public int getRegularWordsAmount() {
+        return regularWordsAmount;
+    }
+
+    public int getBlackWordsAmount() {
+        return blackWordsAmount;
     }
 
     private void chooseRegularWordForTeams(List<String> regularWords, List<Team> teams){

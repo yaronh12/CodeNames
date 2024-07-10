@@ -22,6 +22,12 @@ public class Game {
     private Team winningTeam;
     private int totalWordsInFile;
 
+    private int readyTeamsAmount = 0;
+
+
+    //needs to initialize as false!!!
+    private boolean isGameActive = true;
+
     public Game(GameDataLoader gameGameDataLoader){
         this.txtFileName = gameGameDataLoader.getTxtFileName();
         this.txtFileLocation = gameGameDataLoader.getTxtFileLocation();
@@ -30,6 +36,22 @@ public class Game {
         this.teamsInfo = new TeamsInfo(this.teams);
         this.board = gameGameDataLoader.initializeBoard(this.teams);
         this.totalWordsInFile = gameGameDataLoader.getTotalWords();
+    }
+
+    public int getReadyTeamsAmount() {
+        return readyTeamsAmount;
+    }
+
+    public void increaseReadyTeamsAmount(){
+        readyTeamsAmount++;
+    }
+
+    public boolean isGameActive() {
+        return isGameActive;
+    }
+
+    public void setGameActive(boolean gameActive) {
+        isGameActive = gameActive;
     }
 
     public int getTotalWordsInFile() {
