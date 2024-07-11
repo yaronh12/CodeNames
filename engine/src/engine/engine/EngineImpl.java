@@ -5,11 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import engine.data.exception.UsernameAlreadyExistInSystemException;
 import engine.data.loader.GameDataLoader;
 import components.card.Card;
 import engine.game.Game;
@@ -25,14 +24,12 @@ import javax.xml.bind.Unmarshaller;
 import static engine.data.validators.Validators.*;
 
 public class EngineImpl implements Engine {
-    /*private Data gameData = new Data();
-    private Game activeGame = new Game(this.gameData.getTeamsNames(), this.gameData.getHowManyWordsForEachTeam(), this.getRegularWords(),
-                                       this.getBlackWords(), this.getHowManyRegularWordsInGame(),
-                                        this.getHowManyBlackWordsInGame(), this.getBoardRows(),this.getBoardCols());*/
+
     private List<Game> activeGames = new ArrayList<>();
     private ECNGame gameDataFile;
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "generated";
 
+    private Set<String> usernames = new HashSet<>();
     private String txtFileLocation;
     public void readXmlFile(String xmlName) throws FileNotFoundException, JAXBException, RuntimeException {
 
@@ -43,6 +40,12 @@ public class EngineImpl implements Engine {
             txtFileLocation = Paths.get(xmlName).getParent().resolve(gameDataFile.getECNDictionaryFile()).toString();
             xmlContentValidator(gameDataFile, txtFileLocation);
 
+    }
+
+    @Override
+    public synchronized void addPlayer(String username) throws RuntimeException{
+        validateUsername(usernames, username);
+        usernames.add(username);
     }
 
     private void xmlContentValidator(ECNGame gameInfo, String txtFileLocation) throws RuntimeException, FileNotFoundException {

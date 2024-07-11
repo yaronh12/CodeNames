@@ -8,6 +8,9 @@ public class Team {
     private int guessersAmount;
     private int definersAmount;
 
+    private int readyGuessersAmount;
+    private int readyDefinersAmount;
+
     public int getGuessersAmount() {
         return guessersAmount;
     }
@@ -23,6 +26,22 @@ public class Team {
         this.turnCounter = 0;
         this.definersAmount = definersAmount;
         this.guessersAmount = guessersAmount;
+    }
+
+    public int getReadyGuessersAmount() {
+        return readyGuessersAmount;
+    }
+
+    public int getReadyDefinersAmount() {
+        return readyDefinersAmount;
+    }
+
+    public void increaseReadyGuessersAmount(){
+        readyGuessersAmount++;
+    }
+
+    public void increaseReadyDefinersAmount(){
+        readyDefinersAmount++;
     }
 
     public String getTeamName(){

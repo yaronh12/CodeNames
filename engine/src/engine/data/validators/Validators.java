@@ -87,6 +87,12 @@ public class Validators {
      * @param gameInfo The game information containing all relevant data structures.
      * @throws TeamCardLimitExceededException If the combined card count exceeds the total available cards.
      */
+
+    public static void validateUsername(Set<String> namesSet, String newName)throws RuntimeException{
+        if(namesSet.contains(newName))
+            throw new UsernameAlreadyExistInSystemException("Username already exist in system! Please enter other username.");
+
+    }
     public static void validateTeamTotalCardAmount(ECNGame gameInfo) throws RuntimeException {
         int cardsCount = gameInfo.getECNBoard().getCardsCount();
         int teamsTotalCardAmount = 0;

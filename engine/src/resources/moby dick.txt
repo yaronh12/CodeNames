@@ -20067,7 +20067,7 @@ the destiny of all his race. Nor does it unfrequently occur, that
 Nantucket captains will send a son of such tender age away from them,
 for a protracted three or four years' voyage in some other ship than
 their own; so that their first knowledge of a whaleman's career shall
-be unenervated by any chance display of a father's natural but untimely
+be unenervated by any chance ui of a father's natural but untimely
 partiality, or undue apprehensiveness and concern.
 
 Meantime, now the stranger was still beseeching his poor boon of Ahab;
@@ -21876,7 +21876,7 @@ permission of the copyright holder found at the beginning of this work.
 License terms from this work, or any files containing a part of this
 work or any other work associated with Project Gutenberg-tm.
 
-1.E.5.  Do not copy, display, perform, distribute or redistribute this
+1.E.5.  Do not copy, ui, perform, distribute or redistribute this
 electronic work, or any part of this electronic work, without
 prominently displaying the sentence set forth in paragraph 1.E.1 with
 active links or immediate access to the full terms of the Project

@@ -1,18 +1,17 @@
 import callconfig.CallConfig;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
-import okhttp3.HttpUrl;
-import ui.GeneralGameInfo;
 import okhttp3.Request;
 import okhttp3.Response;
-import utils.Utils;
+import ui.GeneralGameInfo;
 
 import java.io.IOException;
 
 import static utils.Utils.UserType.ADMIN;
+import static utils.Utils.UserType.PLAYER;
 
-public class DisplayGamesDetails {
-    public static void displayGamesDetails(){
+public class GetGamesDetails {
+    public static void getGamesDetails(){
         String RESOURCE = "/games-details";
        /* HttpUrl.Builder urlBuilder = HttpUrl.parse(CallConfig.BASE_URL + RESOURCE).newBuilder();
         urlBuilder.addQueryParameter("Live game choice", ADMIN.toString());
@@ -25,7 +24,7 @@ public class DisplayGamesDetails {
             String responseBody = response.body().string();
             if(response.isSuccessful()){
                 JsonArray gamesList = JsonParser.parseString(responseBody).getAsJsonArray();
-                GeneralGameInfo.printAllGamesInfo(gamesList, ADMIN);
+                GeneralGameInfo.printAllGamesInfo(gamesList, PLAYER);
             }
             else{
                 System.out.println("Request Failed: Code " + response.code());
@@ -34,6 +33,5 @@ public class DisplayGamesDetails {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 }

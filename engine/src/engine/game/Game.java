@@ -25,8 +25,8 @@ public class Game {
     private int readyTeamsAmount = 0;
 
 
-    //needs to initialize as false!!!
-    private boolean isGameActive = true;
+
+    private boolean isGameActive = true;    //needs to initialize as false!!!
 
     public Game(GameDataLoader gameGameDataLoader){
         this.txtFileName = gameGameDataLoader.getTxtFileName();

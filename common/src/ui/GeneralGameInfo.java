@@ -1,13 +1,13 @@
-package display;
+package ui;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
+import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static display.BoardPrinter.displayBoard;
+import static ui.BoardPrinter.displayBoard;
 
 
 /**
@@ -42,6 +42,59 @@ public class GeneralGameInfo {
         int nextTeamIndex = (teamsInfo.get("currentTeamIndex").getAsInt() + 1) % teamsInfo.get("teams").getAsJsonArray().size();
         return teamsInfo.get("teams").getAsJsonArray().get(nextTeamIndex).getAsJsonObject().get("name").getAsString();
     }
+
+    public static void printAllGamesInfo(JsonArray gamesList, Utils.UserType userType){
+        JsonObject currGame;
+        for(int i=0;i<gamesList.size();i++){
+            currGame = gamesList.get(i).getAsJsonObject();
+            System.out.println("------Game #"+(i+1)+"------");
+            System.out.println("Name: "+currGame.get("gameName").getAsString());
+            System.out.println("Status: "+(currGame.get("isGameActive").getAsBoolean() ? "Active" : "Pending"));
+            System.out.println("Board Layout: "+currGame.get("board").getAsJsonObject().get("rows").getAsInt() + " X " +
+                    currGame.get("board").getAsJsonObject().get("cols").getAsInt());
+            System.out.println("Text file: " + currGame.get("txtFileName").getAsString() + " contains "+
+                    currGame.get("totalWordsInFile").getAsInt() + " unique words.");
+            System.out.println("Regular words: "+currGame.get("board").getAsJsonObject().get("regularWordsAmount").getAsInt()
+                    +", Black words: "+currGame.get("board").getAsJsonObject().get("blackWordsAmount").getAsInt());
+            JsonArray teamsList = currGame.get("teams").getAsJsonArray();
+            JsonObject currTeam;
+            for(int j=0;j<teamsList.size();j++){
+                currTeam = teamsList.get(j).getAsJsonObject();
+                System.out.println("Team #"+(j+1)+":");
+                System.out.println("\tName: " + currTeam.get("name").getAsString());
+                System.out.println("\tWords Amount: " + currTeam.get("cardsAmount").getAsInt());
+                if(userType == Utils.UserType.PLAYER){
+                    System.out.println("\tDefiners: "+ currTeam.get("readyDefinersAmount").getAsInt() + " / " + currTeam.get("definersAmount").getAsInt());
+                    System.out.println("\tGuessers: "+ currTeam.get("readyGuessersAmount").getAsInt() + " / " + currTeam.get("guessersAmount").getAsInt());
+                }
+                else{
+                    System.out.println("\tDefiners amount: " + currTeam.get("definersAmount").getAsInt());
+                    System.out.println("\tGuessers amount: " + currTeam.get("guessersAmount").getAsInt());
+                }
+
+            }
+        }
+    }
+
+    public static JsonArray printAllActiveGamesInfo(JsonArray activeGamesJson){
+        if(!activeGamesJson.isEmpty()) {
+            JsonObject currGame;
+            for (int i = 0; i < activeGamesJson.size(); i++) {
+                currGame = activeGamesJson.get(i).getAsJsonObject();
+                System.out.println("Game #" + (i + 1) + ":");
+                System.out.println("\tName: " + currGame.get("gameName").getAsString());
+                System.out.println("\t" + currGame.get("readyTeamsAmount").getAsInt() + " / " +
+                        currGame.get("totalTeamsAmount").getAsInt() + " teams are ready to play");
+
+            }
+            return activeGamesJson;
+        }
+        else{
+            System.out.println("No active games!");
+            return null;
+        }
+    }
+
     public static void printActiveGameInfo(JsonObject game){
         JsonObject teamsInfo = game.get("teamsInfo").getAsJsonObject();
         JsonObject board = game.get("board").getAsJsonObject();

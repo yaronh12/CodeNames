@@ -1,8 +1,5 @@
 import com.google.gson.JsonArray;
-import okhttp3.*;
-
-import java.io.IOException;
-import java.util.Scanner;
+import utils.Utils;
 
 public class AdminMenus {
 
@@ -26,8 +23,13 @@ public class AdminMenus {
                 isAdminWantToStay= true;
                 break;
             case 2:
-                DisplayGamesDetails.displayGamesDetails();
-                isAdminWantToStay= true;
+                if(FileUpload.oneFileGotUploaded){
+                    DisplayGamesDetails.displayGamesDetails();
+                    isAdminWantToStay= true;
+                }
+                else{
+                    isAdminWantToStay = false;
+                }
                 break;
             case 3:
                 JsonArray activeGamesList = WatchLiveGame.displayActiveGames();

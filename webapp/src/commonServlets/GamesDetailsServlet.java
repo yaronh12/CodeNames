@@ -1,3 +1,5 @@
+package commonServlets;
+
 import com.google.gson.Gson;
 import engine.engine.Engine;
 import jakarta.servlet.ServletException;
@@ -23,6 +25,7 @@ public class GamesDetailsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res){
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
+
         Gson gson = new Gson();
         String jsonResponse = gson.toJson(engine.getAllGamesList());
         try {

@@ -1,14 +1,13 @@
-import com.google.gson.Gson;
+import callconfig.CallConfig;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import display.GeneralGameInfo;
+import ui.GeneralGameInfo;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 
 public class WatchLiveGame {
 
@@ -21,25 +20,9 @@ public class WatchLiveGame {
         try (Response response =  CallConfig.HTTP_CLIENT.newCall(request).execute()){
             String responseBody = response.body().string();
             if(response.isSuccessful()){
-               // Gson gson = new Gson();
-                //Type mapType = new TypeToken<Map<Integer, ActiveGameInfo>>(){}.getType();
-                JsonArray activeGamesJson = JsonParser.parseString(responseBody).getAsJsonArray();
-                if(activeGamesJson.size() != 0) {
-                    JsonObject currGame;
-                    for (int i = 0; i < activeGamesJson.size(); i++) {
-                        currGame = activeGamesJson.get(i).getAsJsonObject();
-                        System.out.println("Game #" + (i + 1) + ":");
-                        System.out.println("\tName: " + currGame.get("gameName").getAsString());
-                        System.out.println("\t" + currGame.get("readyTeamsAmount").getAsInt() + " / " +
-                                currGame.get("totalTeamsAmount").getAsInt() + " teams are ready to play");
 
-                    }
-                    return activeGamesJson;
-                }
-                else{
-                    System.out.println("No active games!");
-                    return null;
-                }
+                JsonArray activeGamesJson = JsonParser.parseString(responseBody).getAsJsonArray();
+                return GeneralGameInfo.printAllActiveGamesInfo(activeGamesJson);
 
             }
             else{

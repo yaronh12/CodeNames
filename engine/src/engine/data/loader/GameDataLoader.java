@@ -82,7 +82,7 @@ public class GameDataLoader {
 
     private List<String> uploadWordsDictionary(){
         //String fileName = (String)gameData.getECNDictionaryFile();
-        String content = loadFileToString(txtFileLocation).replaceAll("[@#$%^&*()_,.?!-]","");
+        String content = loadFileToString(txtFileLocation).replaceAll("[@#$%^;\"&*'()_,.?!-]","");
         String[] wordsArray = content.split("\\s+");
         return Arrays.stream(wordsArray)
                 .collect(Collectors.toList());

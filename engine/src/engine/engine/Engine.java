@@ -45,7 +45,7 @@ public interface Engine {
 
     TeamsInfo getTeamsInfo(int gameIndex);
 
-
+    void addPlayer(String username) throws RuntimeException;
 
     List<Game> getAllGamesList();
 

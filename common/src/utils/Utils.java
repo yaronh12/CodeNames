@@ -1,7 +1,12 @@
+package utils;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Utils {
+    public enum UserType {
+        ADMIN, PLAYER
+    }
     public static int getValidInteger(int lowerLimit, int upperLimit) {
         Scanner scanner = new Scanner(System.in);
         int userChoice = 0;
