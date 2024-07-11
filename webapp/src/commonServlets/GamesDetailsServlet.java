@@ -30,7 +30,6 @@ public class GamesDetailsServlet extends HttpServlet {
         String jsonResponse = gson.toJson(engine.getAllGamesList());
         try {
             res.getWriter().write(jsonResponse);
-           // res.getWriter().write(engine.getGamesDetails());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

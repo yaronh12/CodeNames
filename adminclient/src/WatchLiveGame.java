@@ -6,6 +6,7 @@ import ui.GeneralGameInfo;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.Response;
+import utils.Utils;
 
 import java.io.IOException;
 
@@ -22,7 +23,7 @@ public class WatchLiveGame {
             if(response.isSuccessful()){
 
                 JsonArray activeGamesJson = JsonParser.parseString(responseBody).getAsJsonArray();
-                return GeneralGameInfo.printAllActiveGamesInfo(activeGamesJson);
+                return GeneralGameInfo.printAllActiveGames(activeGamesJson);
 
             }
             else{

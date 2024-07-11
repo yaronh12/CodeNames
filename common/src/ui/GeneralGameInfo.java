@@ -47,36 +47,40 @@ public class GeneralGameInfo {
         JsonObject currGame;
         for(int i=0;i<gamesList.size();i++){
             currGame = gamesList.get(i).getAsJsonObject();
-            System.out.println("------Game #"+(i+1)+"------");
-            System.out.println("Name: "+currGame.get("gameName").getAsString());
-            System.out.println("Status: "+(currGame.get("isGameActive").getAsBoolean() ? "Active" : "Pending"));
-            System.out.println("Board Layout: "+currGame.get("board").getAsJsonObject().get("rows").getAsInt() + " X " +
-                    currGame.get("board").getAsJsonObject().get("cols").getAsInt());
-            System.out.println("Text file: " + currGame.get("txtFileName").getAsString() + " contains "+
-                    currGame.get("totalWordsInFile").getAsInt() + " unique words.");
-            System.out.println("Regular words: "+currGame.get("board").getAsJsonObject().get("regularWordsAmount").getAsInt()
-                    +", Black words: "+currGame.get("board").getAsJsonObject().get("blackWordsAmount").getAsInt());
-            JsonArray teamsList = currGame.get("teams").getAsJsonArray();
-            JsonObject currTeam;
-            for(int j=0;j<teamsList.size();j++){
-                currTeam = teamsList.get(j).getAsJsonObject();
-                System.out.println("Team #"+(j+1)+":");
-                System.out.println("\tName: " + currTeam.get("name").getAsString());
-                System.out.println("\tWords Amount: " + currTeam.get("cardsAmount").getAsInt());
-                if(userType == Utils.UserType.PLAYER){
-                    System.out.println("\tDefiners: "+ currTeam.get("readyDefinersAmount").getAsInt() + " / " + currTeam.get("definersAmount").getAsInt());
-                    System.out.println("\tGuessers: "+ currTeam.get("readyGuessersAmount").getAsInt() + " / " + currTeam.get("guessersAmount").getAsInt());
-                }
-                else{
-                    System.out.println("\tDefiners amount: " + currTeam.get("definersAmount").getAsInt());
-                    System.out.println("\tGuessers amount: " + currTeam.get("guessersAmount").getAsInt());
-                }
-
-            }
+            printGame(currGame, Utils.UserType.ADMIN,i);
         }
     }
 
-    public static JsonArray printAllActiveGamesInfo(JsonArray activeGamesJson){
+    private static void printGame(JsonObject currGame, Utils.UserType userType, int gameIndex){
+        System.out.println("------Game #"+(gameIndex+1)+"------");
+        System.out.println("Name: "+currGame.get("gameName").getAsString());
+        System.out.println("Status: "+(currGame.get("isGameActive").getAsBoolean() ? "Active" : "Pending"));
+        System.out.println("Board Layout: "+currGame.get("board").getAsJsonObject().get("rows").getAsInt() + " X " +
+                currGame.get("board").getAsJsonObject().get("cols").getAsInt());
+        System.out.println("Text file: " + currGame.get("txtFileName").getAsString() + " contains "+
+                currGame.get("totalWordsInFile").getAsInt() + " unique words.");
+        System.out.println("Regular words: "+currGame.get("board").getAsJsonObject().get("regularWordsAmount").getAsInt()
+                +", Black words: "+currGame.get("board").getAsJsonObject().get("blackWordsAmount").getAsInt());
+        JsonArray teamsList = currGame.get("teams").getAsJsonArray();
+        JsonObject currTeam;
+        for(int j=0;j<teamsList.size();j++){
+            currTeam = teamsList.get(j).getAsJsonObject();
+            System.out.println("Team #"+(j+1)+":");
+            System.out.println("\tName: " + currTeam.get("name").getAsString());
+            System.out.println("\tWords Amount: " + currTeam.get("cardsAmount").getAsInt());
+            if(userType == Utils.UserType.PLAYER){
+                System.out.println("\tDefiners: "+ currTeam.get("readyDefinersAmount").getAsInt() + " / " + currTeam.get("definersAmount").getAsInt());
+                System.out.println("\tGuessers: "+ currTeam.get("readyGuessersAmount").getAsInt() + " / " + currTeam.get("guessersAmount").getAsInt());
+            }
+            else{
+                System.out.println("\tDefiners amount: " + currTeam.get("definersAmount").getAsInt());
+                System.out.println("\tGuessers amount: " + currTeam.get("guessersAmount").getAsInt());
+            }
+
+        }
+    }
+
+    public static JsonArray printAllActiveGames(JsonArray activeGamesJson){
         if(!activeGamesJson.isEmpty()) {
             JsonObject currGame;
             for (int i = 0; i < activeGamesJson.size(); i++) {
@@ -92,6 +96,19 @@ public class GeneralGameInfo {
         else{
             System.out.println("No active games!");
             return null;
+        }
+    }
+
+    public static void printAllPendingGamesInfo(JsonArray pendingGamesJson) {
+        if(!pendingGamesJson.isEmpty()){
+            JsonObject currGame;
+            for(int i=0;i< pendingGamesJson.size();i++){
+                currGame = pendingGamesJson.get(i).getAsJsonObject().get("game").getAsJsonObject();
+                printGame(currGame, Utils.UserType.PLAYER,i);
+            }
+        }
+        else{
+            System.out.println("All games are active. No pending games.");
         }
     }
 
@@ -113,6 +130,7 @@ public class GeneralGameInfo {
         }
         System.out.println("Next turn is " + getNextTeamName(teamsInfo));
     }
+
 
 
 
