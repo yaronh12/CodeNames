@@ -9,6 +9,7 @@ import team.team.Team;
 import team.team.TeamsInfo;
 import team.turn.Guess;
 
+import javax.management.relation.Role;
 import javax.xml.bind.JAXBException;
 
 public interface Engine {
@@ -48,6 +49,14 @@ public interface Engine {
     void addPlayer(String username) throws RuntimeException;
 
     List<Game> getAllGamesList();
+
+    void registerPlayerToGame(int gameIndex, int teamIndex, String role);
+
+    boolean isTurnAllowedForRole(String role, int gameIndex);
+
+    boolean isGameActive(int gameIndex);
+
+    boolean isTurnAllowedForTeam(int teamIndex , int gameIndex);
 
 
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ECN-Game name="classic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="CodeNames-v2.xsd">
+	<ECN-Dictionary-File>moby dick.txt</ECN-Dictionary-File>
+	<ECN-Board cards-count="24" black-cards-count="1">
+		<ECN-Layout rows="5" columns="5"/>
+	</ECN-Board>
+	<ECN-Teams>
+		<ECN-Team name="T1" cards-count="9" definers="1" guessers="1"/>
+		<ECN-Team name="T2" cards-count="9" definers="1" guessers="1"/>
+	</ECN-Teams>
+</ECN-Game>

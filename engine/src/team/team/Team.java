@@ -67,6 +67,9 @@ public class Team {
         return this.turnCounter;
     }
 
+    public boolean isReady(){
+        return guessersAmount == readyGuessersAmount && definersAmount == readyDefinersAmount;
+    }
     @Override
     public String toString(){
         return ""+this.name+" have "+this.cardsAmount+" words";

@@ -131,6 +131,27 @@ public class GeneralGameInfo {
         System.out.println("Next turn is " + getNextTeamName(teamsInfo));
     }
 
+    public static void printLiveGameStatus(JsonObject game, BoardPrinter.Role role){
+        System.out.println("------ Game Status ------");
+        System.out.println("1. Status: " + ((game.get("isGameActive").getAsBoolean()) ? "Active" : "Pending"));
+        JsonObject teamsInfo = game.get("teamsInfo").getAsJsonObject();
+        JsonObject currTeam = teamsInfo.get("teams").getAsJsonArray().get(teamsInfo.get("currentTeamIndex").getAsInt()).getAsJsonObject();
+        System.out.println("2. Current team: " + currTeam.get("name").getAsString());
+        System.out.println("\tscore: "+currTeam.get("score").getAsInt() +" / "+currTeam.get("cardsAmount").getAsInt());
+        System.out.println("\tturns played: "+currTeam.get("turnCounter").getAsInt());
+        int nextTeamIndex = (teamsInfo.get("currentTeamIndex").getAsInt() + 1) % teamsInfo.get("teams").getAsJsonArray().size();
+        JsonObject nextTeam = teamsInfo.get("teams").getAsJsonArray().get(nextTeamIndex).getAsJsonObject();
+        System.out.println("3. Next team to play: " + nextTeam.get("name").getAsString());
+        JsonObject board = game.get("board").getAsJsonObject();
+        JsonArray cards = board.get("cards").getAsJsonArray();
+        int rows = board.get("rows").getAsInt();
+        int cols = board.get("cols").getAsInt();
+        displayBoard(cards,rows,cols, role);
+
+
+
+    }
+
 
 
 

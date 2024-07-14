@@ -21,11 +21,12 @@ public class Game {
     private Board board;
     private Team winningTeam;
     private int totalWordsInFile;
+    private String currentClueWord;
+    private int currentNumOfGuesses;
 
     private int readyTeamsAmount = 0;
 
-
-
+    private boolean isDefinitionAlreadyTaken = false;
     private boolean isGameActive = false;
 
     public Game(GameDataLoader gameGameDataLoader){
@@ -40,6 +41,30 @@ public class Game {
 
     public int getReadyTeamsAmount() {
         return readyTeamsAmount;
+    }
+
+    public boolean areAllTeamsReady(){
+        for(Team team: teams){
+            if(!team.isReady())
+                return false;
+        }
+        return true;
+    }
+
+    public String getCurrentClueWord() {
+        return currentClueWord;
+    }
+
+    public int getCurrentNumOfGuesses() {
+        return currentNumOfGuesses;
+    }
+
+    public void setCurrentClueWord(String currentClueWord) {
+        this.currentClueWord = currentClueWord;
+    }
+
+    public void setCurrentNumOfGuesses(int currentNumOfGuesses) {
+        this.currentNumOfGuesses = currentNumOfGuesses;
     }
 
     public void increaseReadyTeamsAmount(){
@@ -114,6 +139,13 @@ public class Game {
         this.winningTeam = team;
     }
 
+    public boolean isDefinitionAlreadyTaken() {
+        return isDefinitionAlreadyTaken;
+    }
+
+    public void setDefinitionAlreadyTaken(boolean definitionAlreadyTaken) {
+        isDefinitionAlreadyTaken = definitionAlreadyTaken;
+    }
 
     /**
      * Analyzes a player's guess and updates game state based on the guess.

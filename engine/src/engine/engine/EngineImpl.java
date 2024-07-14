@@ -48,6 +48,51 @@ public class EngineImpl implements Engine {
         usernames.add(username);
     }
 
+    @Override
+    public void registerPlayerToGame(int gameIndex, int teamIndex, String role){
+        Team team = activeGames.get(gameIndex).getTeams().get(teamIndex);
+        if(role.equals("SPYMASTER")){
+            team.increaseReadyDefinersAmount();
+        }
+        else{
+            team.increaseReadyGuessersAmount();
+        }
+
+        if(team.getGuessersAmount() == team.getReadyGuessersAmount() &&
+            team.getDefinersAmount() == team.getReadyDefinersAmount()){
+            activeGames.get(gameIndex).increaseReadyTeamsAmount();
+            if(activeGames.get(gameIndex).areAllTeamsReady())
+                activeGames.get(gameIndex).setGameActive(true);
+        }
+
+    }
+
+    @Override
+    public boolean isTurnAllowedForRole(String role, int gameIndex){
+        if(activeGames.get(gameIndex).isDefinitionAlreadyTaken()){
+            if(role.equals("GUESSER"))
+                return true;
+            return false;
+        }
+        else{
+            if(role.equals("SPYMASTER"))
+                return true;
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isTurnAllowedForTeam(int teamIndex , int gameIndex){
+        return activeGames.get(gameIndex).getTeamsInfo().getCurrentTeamIndex() == teamIndex;
+    }
+
+    @Override
+    public boolean isGameActive(int gameIndex){
+        return activeGames.get(gameIndex).isGameActive();
+    }
+
+
+
     private void xmlContentValidator(ECNGame gameInfo, String txtFileLocation) throws RuntimeException, FileNotFoundException {
         validateGameName(gameInfo, activeGames.stream()
                                                 .map(Game::getGameName)
