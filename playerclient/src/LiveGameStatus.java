@@ -10,13 +10,14 @@ import ui.GeneralGameInfo;
 import java.io.IOException;
 
 public class LiveGameStatus {
-    public static void getLiveGameStatus(int gameIndex, BoardPrinter.Role role){
+    public static boolean getLiveGameStatus(int gameIndex,int teamIndex, BoardPrinter.Role role){
         String RESOURCE = "/live-game-status";
         HttpUrl.Builder urlBuilder = HttpUrl.parse(CallConfig.BASE_URL + RESOURCE).newBuilder();
         urlBuilder.addQueryParameter("Live game status index", Integer.toString(gameIndex));
+        urlBuilder.addQueryParameter("team index", Integer.toString(teamIndex));
         //urlBuilder.addQueryParameter("role",Integer.toString(role));
         String finalUrl = urlBuilder.build().toString();
-
+        boolean isTeamFinished = false;
         Request request = new Request.Builder()
                 .url(finalUrl)
                 .build();
@@ -29,13 +30,14 @@ public class LiveGameStatus {
                 GeneralGameInfo.printLiveGameStatus(game,role);
             }
             else{
-                System.out.println("Request Failed: Code " + response.code());
-                System.out.println("Error messege: " + responseBody);
+                //System.out.println("Request Failed: Code " + response.code());
+                System.out.println(responseBody);
+                isTeamFinished = true;
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-
+        return isTeamFinished;
     }
 }

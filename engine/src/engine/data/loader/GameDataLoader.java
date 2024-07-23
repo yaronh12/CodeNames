@@ -19,6 +19,9 @@ public class GameDataLoader {
     private String txtFileLocation;
 
 
+    public ECNGame getGameData() {
+        return gameData;
+    }
 
     public GameDataLoader(ECNGame gameData){
         this.gameData = gameData;
@@ -61,7 +64,13 @@ public class GameDataLoader {
 
         int rows = gameData.getECNBoard().getECNLayout().getRows();
         int cols = gameData.getECNBoard().getECNLayout().getColumns();
-        return new Board(regularWords,blackWords,regularWordsAmount,blackWordsAmount,rows,cols,teams);
+        return new Board(regularWords,blackWords,regularWordsAmount,blackWordsAmount,rows,cols,teams,gameWords);
+    }
+
+    public Board resetBoard(Board lastBoard, List<Team> teams){
+        List<String> regularWords = getRandomStringsAndRemoveFromOriginal(lastBoard.getGameWords(), lastBoard.getRegularWordsAmount());
+        List<String> blackWords = getRandomStringsAndRemoveFromOriginal(lastBoard.getGameWords(), lastBoard.getBlackWordsAmount());
+        return new Board(regularWords, blackWords, lastBoard.getRegularWordsAmount(), lastBoard.getBlackWordsAmount(), lastBoard.getRows(), lastBoard.getCols(), teams, lastBoard.getGameWords());
     }
 
     private List<String> getRandomStringsAndRemoveFromOriginal(List<String> originalList, int count) {

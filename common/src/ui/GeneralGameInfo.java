@@ -1,6 +1,7 @@
 package ui;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import utils.Utils;
 
@@ -40,6 +41,7 @@ public class GeneralGameInfo {
 
     private static String getNextTeamName(JsonObject teamsInfo){
         int nextTeamIndex = (teamsInfo.get("currentTeamIndex").getAsInt() + 1) % teamsInfo.get("teams").getAsJsonArray().size();
+
         return teamsInfo.get("teams").getAsJsonArray().get(nextTeamIndex).getAsJsonObject().get("name").getAsString();
     }
 
@@ -108,7 +110,9 @@ public class GeneralGameInfo {
             }
         }
         else{
-            System.out.println("All games are active. No pending games.");
+            if(pendingGamesJson.isEmpty())
+                System.out.println("No pending games in system.");
+            //System.out.println("All games are active. No pending games.");
         }
     }
 
@@ -128,6 +132,7 @@ public class GeneralGameInfo {
             System.out.println(" - Score: " + teamsScores.get(i));
             System.out.println(" - Turns played: " + teamTurnCounter.get(i));
         }
+        System.out.println("Now Playing: " + teams.get(teamsInfo.get("currentTeamIndex").getAsInt()).getAsJsonObject().get("name").getAsString());
         System.out.println("Next turn is " + getNextTeamName(teamsInfo));
     }
 

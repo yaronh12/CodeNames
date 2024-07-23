@@ -44,12 +44,16 @@ public class FileUploadServlet extends HttpServlet {
                 engine.loadGameData();
                 res.getWriter().write("file loaded successfully!\n");
             } catch (FileNotFoundException e) {
+                res.setStatus(HttpServletResponse.SC_CONFLICT);
                 res.getWriter().write("The file was not found. Please check the path and try again.");
             } catch (InvalidPathException e) {
+                res.setStatus(HttpServletResponse.SC_CONFLICT);
                 res.getWriter().write("The file path is invalid. Please enter a correct path.");
             } catch (JAXBException e) {
+                res.setStatus(HttpServletResponse.SC_CONFLICT);
                 res.getWriter().write("JAXB Exception - Error in processing the XML file.");
             } catch (RuntimeException e) {
+                res.setStatus(HttpServletResponse.SC_CONFLICT);
                 res.getWriter().write("An unexpected error occurred: " + e.getMessage());
             }
 

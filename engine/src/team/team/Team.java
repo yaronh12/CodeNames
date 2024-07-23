@@ -11,6 +11,9 @@ public class Team {
     private int readyGuessersAmount;
     private int readyDefinersAmount;
 
+    private boolean isWon = false;
+    private boolean isLost = false;
+
     public int getGuessersAmount() {
         return guessersAmount;
     }
@@ -28,6 +31,25 @@ public class Team {
         this.guessersAmount = guessersAmount;
     }
 
+    public boolean isWon() {
+        return isWon;
+    }
+
+    public boolean isLost() {
+        return isLost;
+    }
+
+    public void setWon(boolean won) {
+        isWon = won;
+    }
+
+    public void setLost(boolean lost) {
+        isLost = lost;
+    }
+
+    public boolean isTeamFinishedCards(){
+        return score == cardsAmount;
+    }
     public int getReadyGuessersAmount() {
         return readyGuessersAmount;
     }

@@ -15,7 +15,17 @@ public class Guess {
 
     private boolean isTurnPassed;
 
+    private boolean isNeedToPassTurn = true;
+
     private String teamNameOnCard;
+
+    public boolean isNeedToPassTurn() {
+        return isNeedToPassTurn;
+    }
+
+    public void setNeedToPassTurn(boolean needToPassTurn) {
+        isNeedToPassTurn = needToPassTurn;
+    }
 
     public String getTeamNameOnCard() {
         return teamNameOnCard;

@@ -31,6 +31,16 @@ public class Validators {
         }
     }
 
+    public static void validateMoreThanOneTeam(ECNGame gameInfo){
+        if(gameInfo.getECNTeams().getECNTeam().size() < 2)
+            throw new NotEnoughTeamsException("Not enough teams.");
+    }
+
+    public static void validateLessThanFiveTeams(ECNGame gameInfo){
+        if(gameInfo.getECNTeams().getECNTeam().size() > 4)
+            throw new MoreThanFourTeamsException("Too many teams! (no more than four teams allowed)");
+    }
+
     public static void validateGameName(ECNGame gameInfo, List<String> names){
         if(names.contains(gameInfo.getName())){
             throw new GameNameAlreadyExistException("Game name already exist in system.");

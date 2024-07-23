@@ -49,6 +49,11 @@ public class EngineImpl implements Engine {
     }
 
     @Override
+    public void removePlayer(String username){
+        usernames.remove(username);
+    }
+
+    @Override
     public void registerPlayerToGame(int gameIndex, int teamIndex, String role){
         Team team = activeGames.get(gameIndex).getTeams().get(teamIndex);
         if(role.equals("SPYMASTER")){
@@ -103,6 +108,8 @@ public class EngineImpl implements Engine {
         validateBoardSize(gameInfo);
         validateTeamNames(gameInfo);
         validateParticipants(gameInfo);
+        validateMoreThanOneTeam(gameInfo);
+        validateLessThanFiveTeams(gameInfo);
     }
 
     public void loadGameData(){
@@ -111,6 +118,13 @@ public class EngineImpl implements Engine {
         activeGames.add(new Game(gameDataLoader));
 
     }
+
+    public void resetGame(int gameIndex){
+        GameDataLoader gameDataLoader = new GameDataLoader(activeGames.get(gameIndex).getEcnGame());
+        activeGames.get(gameIndex).resetGame(gameDataLoader);
+        activeGames.get(gameIndex).setGameActive(false);
+    }
+
   /*  @Override
    public List<String> getRegularWords(){
         return Arrays.asList(this.gameDataFile.getECNWords().getECNGameWords().split(" "));
@@ -146,6 +160,12 @@ public class EngineImpl implements Engine {
         teams.add(new Team(this.gameDataFile.getECNTeam2().getName(),this.gameDataFile.getECNTeam2().getCardsCount()));*/
         return teams;
     }
+
+    @Override
+    public List<Team> getGameTeamsByGameIndex(int gameIndex){
+        return activeGames.get(gameIndex).getTeams();
+    }
+
     @Override
     public Team getCurrentTeam(int gameIndex){
       // return this.activeGame.getTeams().get(this.activeGame.getCurrentTeamIndex());
@@ -172,22 +192,30 @@ public class EngineImpl implements Engine {
        return this.activeGames.get(gameIndex).makeGuess(guess);
     }
 
+
+
     public boolean isGameOver(Guess guess, int gameIndex){
         Game currGame = this.activeGames.get(gameIndex);
         if(guess.isGuessedWordBlack()){
             // picking the other team to win in case of black word
-            // ask aviad what to do in case of multiple teams
-            //this.activeGame.passTurn();
+            int currTeamIndex = currGame.getCurrentTeamIndex();
+            currGame.getTeams().get(currTeamIndex).setLost(true);
+            getTeamsInfo(gameIndex).removeTeam(currTeamIndex);
             currGame.passTurn();
-            //this.activeGame.setWinningTeam(this.activeGame.getTeams().get(this.activeGame.getCurrentTeamIndex()));
-            currGame.setWinningTeam(currGame.getTeams().get(currGame.getCurrentTeamIndex()));
+
+            //currGame.setWinningTeam(currGame.getTeams().get(currGame.getCurrentTeamIndex()));
             return true;
         }
 
 
-        for(Team team: currGame.getTeams()){
+        for(int i=0;i<currGame.getTeams().size();i++){
+            Team team = currGame.getTeams().get(i);
             if(team.getCardAmount() == team.getScore()){
                 currGame.setWinningTeam(team);
+                currGame.getTeams().get(i).setWon(true);
+                getTeamsInfo(gameIndex).removeTeam(i);
+                currGame.passTurn();
+
                 return true;
             }
         }

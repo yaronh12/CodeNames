@@ -6,6 +6,7 @@ public class AdminMenus {
 
     public boolean displayMainMenu(){
         int numOfOptions = 2;
+        System.out.println("----- Main Admin Menu -----");
         System.out.println("Choose one of the following options: ");
         System.out.println("1. Upload new game file.");
         if(FileUpload.oneFileGotUploaded){
@@ -60,8 +61,8 @@ public class AdminMenus {
     private void liveGameDisplayMenu(int adminChoice){
         boolean isAdminStayInLiveGame = true;
         int adminMenuChoice;
-        while(isAdminStayInLiveGame){
-            WatchLiveGame.displayLiveGameByChoice(adminChoice);
+       /* while(isAdminStayInLiveGame){
+            isAdminStayInLiveGame = WatchLiveGame.displayLiveGameByChoice(adminChoice);
             System.out.println("-----Live Game Menu-----");
             System.out.println("1. Update live game score");
             System.out.println("2. Exit to main menu");
@@ -69,7 +70,19 @@ public class AdminMenus {
             adminMenuChoice = Utils.getValidInteger(1,2);
             if(adminMenuChoice == 2)
                 isAdminStayInLiveGame = false;
-        }
+        }*/
+        do{
+            isAdminStayInLiveGame = WatchLiveGame.displayLiveGameByChoice(adminChoice);
+            if(isAdminStayInLiveGame){
+                System.out.println("-----Live Game Menu-----");
+                System.out.println("1. Update live game score");
+                System.out.println("2. Exit to main menu");
+                System.out.println("Please select an option:");
+                adminMenuChoice = Utils.getValidInteger(1,2);
+                if(adminMenuChoice == 2)
+                    isAdminStayInLiveGame = false;
+            }
+        }while(isAdminStayInLiveGame);
     }
 
 

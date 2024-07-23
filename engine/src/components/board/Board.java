@@ -12,11 +12,14 @@ public class Board {
     private int regularWordsAmount;
     private int blackWordsAmount;
 
-    public Board(List<String> regularWords, List<String> blackWords, int regularWordsAmountForGame, int blackWordsAmountForGame, int boardRows, int boardCols, List<Team> teams) {
+    private List<String> gameWords;
+
+    public Board(List<String> regularWords, List<String> blackWords, int regularWordsAmountForGame, int blackWordsAmountForGame, int boardRows, int boardCols, List<Team> teams, List<String> gameWords) {
         /*// Convert List to Set to remove duplicates
         Set<String> WithoutDuplicates = new HashSet<>(regularWords);
         // Convert Set back to List
         List<String> wordWithoutDuplicates = new ArrayList<>(WithoutDuplicates);*/
+        this.gameWords = gameWords;
         regularWordsAmount = regularWords.size();
         blackWordsAmount = blackWords.size();
         chooseRegularWordForTeams(regularWords, teams);
@@ -27,6 +30,10 @@ public class Board {
 
         this.rows = boardRows;
         this.cols = boardCols;
+    }
+
+    public List<String> getGameWords() {
+        return gameWords;
     }
 
     public int getRegularWordsAmount() {

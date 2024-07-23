@@ -32,7 +32,7 @@ public class FileUpload {
                 oneFileGotUploaded = true;
             }
             else{
-                System.out.println("Request failed: " + response.code());
+                //System.out.println("Request failed: " + response.code());
                 System.out.println("Request error messege: " + responseBody);
             }
         } catch (IOException e) {

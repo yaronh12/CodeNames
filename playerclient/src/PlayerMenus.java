@@ -3,11 +3,17 @@ import com.google.gson.JsonObject;
 import ui.BoardPrinter;
 import utils.Utils;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class PlayerMenus {
 
     private int chosenGameIndex;
     private int chosenTeamIndex;
     private BoardPrinter.Role role;
+
+
+
 
     public boolean playerMainMenu(){
         System.out.println("------ Main Menu ------");
@@ -38,8 +44,7 @@ public class PlayerMenus {
                     }
                     role = roleChosen;
                     RegisterToGame.registerToGame(chosenGameIndex,chosenTeamIndex,role);
-                    while(inGameMenu()){}
-
+                    inGameMenu();
 
 
                 }
@@ -63,10 +68,10 @@ public class PlayerMenus {
             System.out.println("2. Play your turn");
             int optionChosen = Utils.getValidInteger(1,2);
             if(optionChosen == 1){
-                LiveGameStatus.getLiveGameStatus(chosenGameIndex,role);
+                isGameOver = LiveGameStatus.getLiveGameStatus(chosenGameIndex,chosenTeamIndex,role);
             }
             else{
-                PlayTurn.askToPlayTurn(role,chosenGameIndex, chosenTeamIndex);
+                isGameOver = PlayTurn.askToPlayTurn(role,chosenGameIndex, chosenTeamIndex);
             }
         }
 

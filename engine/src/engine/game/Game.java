@@ -5,6 +5,7 @@ import java.util.List;
 import components.board.Board;
 import components.card.Card;
 import engine.data.loader.GameDataLoader;
+import generated.ECNGame;
 import team.team.Team;
 import team.team.TeamsInfo;
 import team.turn.Guess;
@@ -29,7 +30,12 @@ public class Game {
     private boolean isDefinitionAlreadyTaken = false;
     private boolean isGameActive = false;
 
+    private int usersCounter = 0;
+
+    private ECNGame ecnGame;
+
     public Game(GameDataLoader gameGameDataLoader){
+        this.ecnGame = gameGameDataLoader.getGameData();
         this.txtFileName = gameGameDataLoader.getTxtFileName();
         this.txtFileLocation = gameGameDataLoader.getTxtFileLocation();
         this.gameName = gameGameDataLoader.getGameName();
@@ -37,6 +43,31 @@ public class Game {
         this.teamsInfo = new TeamsInfo(this.teams);
         this.board = gameGameDataLoader.initializeBoard(this.teams);
         this.totalWordsInFile = gameGameDataLoader.getTotalWords();
+    }
+
+    public int getUsersCounter() {
+        return usersCounter;
+    }
+
+    public void incementUserCounter(){
+        this.usersCounter++;
+    }
+
+    public void decementUserCounter(){
+        this.usersCounter--;
+    }
+
+    public ECNGame getEcnGame() {
+        return ecnGame;
+    }
+
+    public void resetGame(GameDataLoader gameGameDataLoader){
+        this.teams = gameGameDataLoader.initializeTeams();
+        this.teamsInfo = new TeamsInfo(this.teams);
+        this.board = gameGameDataLoader.resetBoard(this.board, this.teams);
+        this.setGameActive(false);
+        this.setDefinitionAlreadyTaken(false);
+        this.readyTeamsAmount = 0;
     }
 
     public int getReadyTeamsAmount() {
@@ -173,6 +204,7 @@ public class Game {
         // Check if the guessed word is on the board.
         if (cardGuess == null) {
             guessInfo.setWordOnBoard(false); // The guessed word is not on the board.
+            guessInfo.setNeedToPassTurn(false);
             return guessInfo;
 
         } else {
@@ -183,6 +215,7 @@ public class Game {
         // Check if the card has already been found in previous guesses.
         if (cardGuess.isFound()) {
             guessInfo.setWordAlreadyFound(true); // The card was already found, so no further action is taken on it.
+            guessInfo.setNeedToPassTurn(false);
             return guessInfo;
 
         } else {

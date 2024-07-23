@@ -53,12 +53,20 @@ public class LiveGamesServlet extends HttpServlet {
         }
         else{
             //admin chose game to watch, display live game details
+
             res.setContentType("application/json");
             res.setCharacterEncoding("UTF-8");
             String liveGameIndexString = req.getParameter("Live game choice");
             int liveGameIndex = Integer.parseInt(liveGameIndexString);
-            String jsonResponse = gson.toJson(engine.getAllGamesList().get(liveGameIndex));
-            res.getWriter().write(jsonResponse);
+            if(!engine.getAllGamesList().get(liveGameIndex).isGameActive()){
+                res.setStatus(HttpServletResponse.SC_CONFLICT);
+                res.getWriter().write("Game Ended! It returned to Pending!");
+            }
+            else{
+                String jsonResponse = gson.toJson(engine.getAllGamesList().get(liveGameIndex));
+                res.getWriter().write(jsonResponse);
+            }
+
         }
     }
 }

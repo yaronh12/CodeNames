@@ -30,6 +30,7 @@ public class GameRegistryServlet  extends HttpServlet {
         String roleString = req.getParameter("role");
 
         engine.registerPlayerToGame(Integer.parseInt(gameIndexString),Integer.parseInt(teamIndexString),roleString);
+        engine.getAllGamesList().get(Integer.parseInt(gameIndexString)).incementUserCounter();
         res.getWriter().write("Registry Succeed!");
 
 

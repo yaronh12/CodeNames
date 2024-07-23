@@ -36,7 +36,7 @@ public class WatchLiveGame {
         return null;
     }
 
-    public static void displayLiveGameByChoice(int adminChoice){
+    public static boolean displayLiveGameByChoice(int adminChoice){
         String RESOURCE = "/live-games";
         HttpUrl.Builder urlBuilder = HttpUrl.parse(CallConfig.BASE_URL + RESOURCE).newBuilder();
         urlBuilder.addQueryParameter("Live game choice", Integer.toString(adminChoice));
@@ -53,13 +53,15 @@ public class WatchLiveGame {
                 GeneralGameInfo.printActiveGameInfo(liveGame);
             }
             else{
-                System.out.println("Request Failed: Code " + response.code());
-                System.out.println("Error messege: " + responseBody);
+                //System.out.println("Request Failed: Code " + response.code());
+                System.out.println(responseBody);
+                return false;
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+        return true;
     }
 
 

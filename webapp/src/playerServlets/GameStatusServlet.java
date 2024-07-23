@@ -26,10 +26,53 @@ public class GameStatusServlet extends HttpServlet {
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
         String gameIndexString = req.getParameter("Live game status index");
+        String teamIndexString = req.getParameter("team index");
         int gameIndex = Integer.parseInt(gameIndexString);
-        String jsonResponse = gson.toJson(engine.getAllGamesList().get(gameIndex));
-        res.getWriter().write(jsonResponse);
+        int teamIndex = Integer.parseInt(teamIndexString);
+        if(engine.getTeamsInfo(gameIndex).getFinishedTeamsIndices().contains(teamIndex)) {
 
+            if (engine.getGameTeamsByGameIndex(gameIndex).get(teamIndex).isWon()) {
+                res.setStatus(HttpServletResponse.SC_CONFLICT);
+                res.getWriter().write("Your Team Won!");
+            } else {
+                if (engine.getGameTeamsByGameIndex(gameIndex).get(teamIndex).isLost()) {
+                    res.setStatus(HttpServletResponse.SC_CONFLICT);
+                    res.getWriter().write("Your team lost because black card got picked!");
+                }
+
+            }
+            decrementUsersAndCheckToResetGame(gameIndex);
+        }
+        else{
+            if(engine.getTeamsInfo(gameIndex).getFinishedTeamsIndices().size() == engine.getGameTeamsByGameIndex(gameIndex).size() - 1){
+                res.setStatus(HttpServletResponse.SC_CONFLICT);
+
+                if(engine.getGameTeamsByGameIndex(gameIndex)
+                        .get(engine.getTeamsInfo(gameIndex).getFinishedTeamsIndices().get(engine.getTeamsInfo(gameIndex).getFinishedTeamsIndices().size() - 1))
+                        .isWon()){
+                    res.getWriter().write("The last other team won! You lose!");
+                }
+                else{
+                    res.getWriter().write("The last other team lost! You won!");
+                }
+                decrementUsersAndCheckToResetGame(gameIndex);
+            }
+            else{
+                String jsonResponse = gson.toJson(engine.getAllGamesList().get(gameIndex));
+                res.getWriter().write(jsonResponse);
+            }
+        }
+
+
+
+
+    }
+
+    private void decrementUsersAndCheckToResetGame(int gameIndex){
+        engine.getAllGamesList().get(gameIndex).decementUserCounter();
+        if(engine.getAllGamesList().get(gameIndex).getUsersCounter() == 0){
+            engine.resetGame(gameIndex);
+        }
     }
 
 }

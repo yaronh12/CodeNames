@@ -5,12 +5,13 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class SignUpToSystem {
+    private static String username;
     public static boolean signUpToSystem(){
         boolean isSignupSuccedded;
-        String name = scanPlayerName();
+        username = scanPlayerName();
         String RESOURCE = "/system-signup";
         HttpUrl.Builder urlBuilder = HttpUrl.parse(CallConfig.BASE_URL + RESOURCE).newBuilder();
-        urlBuilder.addQueryParameter("username", name);
+        urlBuilder.addQueryParameter("username", username);
         String finalUrl = urlBuilder.build().toString();
         String json = "{\"username\": \"newuser\"}";
         RequestBody body = RequestBody.create(json, MediaType.get("application/json; charset=utf-8"));
@@ -42,5 +43,9 @@ public class SignUpToSystem {
         System.out.println("Please enter username:");
         String name = in.nextLine();
         return name;
+    }
+
+    public static String getUsername(){
+        return username;
     }
 }

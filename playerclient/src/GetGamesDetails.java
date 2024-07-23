@@ -24,7 +24,10 @@ public class GetGamesDetails {
             String responseBody = response.body().string();
             if(response.isSuccessful()){
                 JsonArray gamesList = JsonParser.parseString(responseBody).getAsJsonArray();
-                GeneralGameInfo.printAllGamesInfo(gamesList, PLAYER);
+                if(gamesList.isEmpty())
+                    System.out.println("No game is system!");
+                else
+                    GeneralGameInfo.printAllGamesInfo(gamesList, PLAYER);
             }
             else{
                 System.out.println("Request Failed: Code " + response.code());

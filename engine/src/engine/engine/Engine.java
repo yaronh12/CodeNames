@@ -48,6 +48,8 @@ public interface Engine {
 
     void addPlayer(String username) throws RuntimeException;
 
+    void removePlayer(String username);
+
     List<Game> getAllGamesList();
 
     void registerPlayerToGame(int gameIndex, int teamIndex, String role);
@@ -57,6 +59,10 @@ public interface Engine {
     boolean isGameActive(int gameIndex);
 
     boolean isTurnAllowedForTeam(int teamIndex , int gameIndex);
+
+    List<Team> getGameTeamsByGameIndex(int gameIndex);
+
+    void resetGame(int gameIndex);
 
 
 }

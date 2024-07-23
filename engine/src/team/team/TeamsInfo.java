@@ -10,9 +10,20 @@ public class TeamsInfo {
     private int currentTeamIndex;
 
 
+    private List<Integer> finishedTeamsIndices = new ArrayList<>();
+
+
     public TeamsInfo(List<Team> teams){
         this.teams = teams;
         currentTeamIndex = 0;
+    }
+
+    public void removeTeam(int teamIndex){
+        finishedTeamsIndices.add(teamIndex);
+    }
+
+    public List<Integer> getFinishedTeamsIndices(){
+        return finishedTeamsIndices;
     }
 
     public int getHowManyTeams(){
@@ -21,8 +32,24 @@ public class TeamsInfo {
 
     public void passTurn(){
         this.teams.get(currentTeamIndex).addTurn();
+        /*if(!finishedTeamsIndices.contains(currentTeamIndex)){
+            currentTeamIndex = (++currentTeamIndex) % this.teams.size();
+        }
+        else {
+            while (finishedTeamsIndices.contains(currentTeamIndex))
+                currentTeamIndex = (++currentTeamIndex) % this.teams.size();
+        }*/
         currentTeamIndex = (++currentTeamIndex) % this.teams.size();
+        if(finishedTeamsIndices.size() == teams.size())
+            return;
+        else{
+            while (finishedTeamsIndices.contains(currentTeamIndex))
+                currentTeamIndex = (++currentTeamIndex) % this.teams.size();
+        }
+
     }
+
+
 
     public int getCurrentTeamIndex(){
         return currentTeamIndex;
