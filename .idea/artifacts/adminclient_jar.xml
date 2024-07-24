@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact name="adminclient:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/adminclient_jar</output-path>
+    <root id="root">
+      <element id="archive" name="adminclient.jar">
+        <element id="module-output" name="adminclient" />
+        <element id="module-output" name="common" />
+      </element>
+      <element id="file-copy" path="$PROJECT_DIR$/../3rd party libs/okio-2.8.0.jar" />
+      <element id="library" level="project" name="annotations-13.0" />
+      <element id="file-copy" path="$PROJECT_DIR$/../3rd party libs/annotations-13.0.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../3rd party libs/kotlin-stdlib-1.4.10.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../3rd party libs/okhttp-4.9.1.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../3rd party libs/gson-2.8.8.jar" />
+    </root>
+  </artifact>
+</component>

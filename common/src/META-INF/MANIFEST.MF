@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: 
+Class-Path: okio-2.8.0.jar annotations-13.0.jar kotlin-stdlib-1.4.10.jar
+  okhttp-4.9.1.jar gson-2.8.8.jar
+

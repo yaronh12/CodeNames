@@ -1,3 +1,2 @@
 Manifest-Version: 1.0
-AdminClientMain-Class: main.AdminClientMain
 Class-Path: engine_jar/engine.jar

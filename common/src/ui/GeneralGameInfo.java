@@ -151,7 +151,8 @@ public class GeneralGameInfo {
         JsonArray cards = board.get("cards").getAsJsonArray();
         int rows = board.get("rows").getAsInt();
         int cols = board.get("cols").getAsInt();
-        displayBoard(cards,rows,cols, role);
+        if(game.get("isGameActive").getAsBoolean())
+            displayBoard(cards,rows,cols, role);
 
 
 
