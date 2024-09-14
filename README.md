@@ -1,97 +1,80 @@
 # CodeNames Project
 
-The CodeNames Project is a client-server-based game built using Java and Tomcat, designed to facilitate multiple users in participating in different game sessions of the popular board game "Codenames." The server, hosted on Apache Tomcat, manages game sessions, player registrations, and game states, while the admin and player clients interact with the server to upload game configurations, monitor game statuses, and participate in game play. The admin client allows for game configuration and monitoring, while the player client enables registration, game joining, and active participation. The project employs XML for game configuration and consists of several modules, including an engine module for game logic, admin and player modules for user interactions, a common module for shared utilities, and a webapp module for managing server-client communications.
+## Overview
+The **CodeNames** project is a client-server-based multiplayer game implemented using Java and Tomcat. It allows multiple users to participate in various game sessions with different configurations and roles, including players and administrators.
+
 
 ## Technologies Used
-- **Apache Tomcat:** Version 10.0.11
-- **Java:** Version 8
-- **XML:** For game configuration
+- Apache Tomcat (v10.0.11)
+- Java (v8)
+- XML (for game configuration)
+
+## System Requirements
+- JDK 8
+- Apache Tomcat 10
+- Maven/Gradle (for building the project)
 
 ## Architecture
 
 ### Server
-The server is built on Tomcat and hosts the game engine, exposing various endpoints for client interactions. It manages game sessions, player registrations, and game states.
+
+The server, built on Tomcat, follows a RESTful architecture to host the game engine. It manages game sessions, player registrations, and overall game states through a set of RESTful endpoints. The core game logic is contained within the game engine, while servlets act as intermediaries that handle communication between the server and clients by processing requests and responses.
 
 ### Clients
-- **Admin Client:** A console application for uploading game configurations, viewing game statuses, and joining active games as an observer.
-- **Player Client:** A console application for users to register, view available games, join games, and participate in game sessions.
+- **Admin Client**: A console application to upload game configurations, view game statuses, and join active games as an observer.
+- **Player Client**: A console application for users to register, view available games, join, and participate in game sessions.
 
 ## Game Flow
 
 ### Admin View
-1. **Upload Game Configuration**
-   - Admin uploads XML files containing game configurations.
-   - Each configuration is added to the server, increasing the variety of available games.
-2. **View Game Status**
-   - Admin can view a list of all games, including their status (Pending or Active).
-   - Details include board size, dictionary file, number of unique words, and team configurations.
-3. **Join Active Game as Observer**
-   - Admin can join any active game session as an observer.
-   - View the current game status, including the board state, teams, scores, and the current turn.
+1. **Upload Game Configuration**:
+   - Upload XML files containing game configurations, including board size, dictionary, and team setups.
+2. **View Game Status**:
+   - Monitor all games with details like board size, dictionary file, team configurations, and current active game states.
+3. **Join Active Game as Observer**:
+   - Observe the current game status, including board state and scores.
 
 ### Player View
-1. **Register and Login**
-   - Player registers with a unique username. If the username is taken, they are prompted to choose another.
-2. **View Available Games**
-   - Players can see all games in the system, including required teams, roles (Definers and Guessers), and registration status.
-3. **Join a Game**
-   - Players select a game to join, choose a team, and select a role.
-   - Players wait in the game room until the game status changes to Active.
-4. **Participate in the Game**
-   - Definers provide clues, and Guessers guess words based on the clues.
-   - The game continues until one team successfully guesses all their words or a team reveals a black word, leading to immediate loss.
-5. **Game Completion**
-   - The game ends when one team wins or all but one team is eliminated.
-   - Players return to the main menu to join or start another game.
+1. **Register and Login**:
+   - Register with a unique username and log in to access games.
+2. **View Available Games**:
+   - Browse and select games to join based on preferences..
+3. **Join a Game**:
+   - Choose a team and role (Definer or Guesser) in the selected game.
+4. **Participate in the Game**:
+   - Definers provide clues, and Guessers identify words to progress.
+5. **Game Completion**:
+   - The game concludes when a winning condition is met, such as one team uncovering all their words or all but one team being eliminated. Players receive a summary of the game.
 
-## Project Modules
+## Modules
 
-### 1. Engine Module
-The core of the CodeNames game logic. It handles game state management, game configurations, and enforces game rules.
-
-**Key Components:**
-- **Components:** Classes like `Board` and `Card` representing the game board and cards.
-- **Engine:** Main game engine managing the flow and logic.
-- **Game:** Manages individual game states.
-- **Loader:** Handles loading game data from configuration files.
-- **Validators:** Validates game configurations and player inputs.
+### [1. Engine Module](/engine)
+The Engine Module is the backbone of the CodeNames game, encompassing the core logic and rules that drive gameplay. It ensures the correct flow and state management of the game while validating inputs and configurations.
+- **Components**: Represents game entities like `Board` and `Card`.
+- **Engine**: Manages game flow and logic (`Engine` and `EngineImpl`).
+- **Loader**: Loads game data from XML configurations.
+- **Validators**: Validates game configurations and player inputs.
 
 ### 2. Admin Module
-Handles functionalities available to the administrator, such as uploading game configurations, viewing game statuses, and monitoring active games.
-
-**Key Components:**
-- `AdminClientMain`: Entry point for the Admin client application.
-- `AdminMenus`: Manages menu options for the admin.
-- `DisplayGamesDetails`: Displays game details for the admin.
-- `FileUpload`: Handles game configuration file uploads.
-- `WatchLiveGame`: Allows the admin to observe live games.
+Provides functionalities for the administrator.
+- **AdminClientMain**: Entry point for the admin client application.
+- **FileUpload**: Handles the upload of game configurations.
+- **WatchLiveGame**: Allows the admin to watch live games as an observer.
 
 ### 3. Player Module
-Manages functionalities available to the players, including registration, joining games, and participating in game sessions.
-
-**Key Components:**
-- `PlayerClientMain`: Entry point for the Player client application.
-- `PlayerMenus`: Manages menu options for players.
-- `RegisterToGame`: Handles player registration for games.
-- `PendingGamesDisplay`: Shows the list of available games for players to join.
-- `PlayTurn`: Manages the player's turn during the game.
-- `GetGamesDetails`, `LiveGameStatus`: Retrieve game details and live status.
+Provides functionalities for players to register, join, and participate in games.
+- **PlayerClientMain**: Entry point for the player client application.
+- **RegisterToGame**: Manages player registration for games.
+- **PlayTurn**: Manages the player's turn during the game.
 
 ### 4. Common Module
-Contains shared utilities and UI components used across both admin and player modules.
-
-**Key Components:**
-- **UI:** Classes like `BoardPrinter` and `CardToString` for displaying game information.
-- **Utils:** Common utility functions used across different modules.
-- **CallConfig:** Manages HTTP communication between clients and the server.
+Contains shared utilities and UI components.
+- **UI**: Includes `BoardPrinter` and `CardToString` for displaying game information.
+- **Utils**: Provides common utility functions.
+- **CallConfig**: Manages HTTP communication between clients and the server using OkHttp.
 
 ### 5. Webapp Module
-Handles web-related functionalities and serves as the interface between the clients and the game engine core. Contains servlets that process client requests.
-
-**Key Components:**
-- `FileUploadServlet`: Manages file upload requests from the admin.
-- `LiveGamesServlet`: Provides live game status to the admin.
-- `GameRegistryServlet`: Handles game registration requests from players.
-- `GameStatusServlet`: Provides current game status to players.
-- `PendingGamesServlet`: Lists pending games for players.
-- `PlayTurnServlet`: Manages player turns during the game.
+Handles web-related functionalities and serves as the interface between clients and the engine core.
+- **FileUploadServlet**: Manages file upload requests.
+- **LiveGamesServlet**: Provides live game status.
+- **PlayTurnServlet**: Manages player turns during the game.
