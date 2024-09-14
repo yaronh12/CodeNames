@@ -63,9 +63,9 @@ The Admin Module provides the tools necessary for administrators to configure an
 
 ### [3. Player Module](/playerclient)
 The Player Module empowers players to engage with the game, from registration to active participation in game sessions. It manages player interactions and game state updates during gameplay.
-- **[PlayerClientMain](/playerclient/PlayerClientMain.java)**: EEntry point for the player client application, providing access to game functionalities for players.
-- **[RegisterToGame](/playerclient/RegisterToGame.java)**: Manages player registration for games.
-- **[PlayTurn](/playerclient/PlayTurn.java)**: Manages the player's turn during the game, processing actions such as providing clues or guessing words.
+- **[PlayerClientMain](/playerclient/src/PlayerClientMain.java)**: EEntry point for the player client application, providing access to game functionalities for players.
+- **[RegisterToGame](/playerclient/src/RegisterToGame.java)**: Manages player registration for games.
+- **[PlayTurn](/playerclient/src/PlayTurn.java)**: Manages the player's turn during the game, processing actions such as providing clues or guessing words.
 
 ### [4. Common Module](/common)
 Contains shared utilities and UI components.
