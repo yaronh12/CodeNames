@@ -50,30 +50,30 @@ The server, built on Tomcat, follows a RESTful architecture to host the game eng
 
 ### [1. Engine Module](/engine)
 The Engine Module is the backbone of the CodeNames game, encompassing the core logic and rules that drive gameplay. It ensures the correct flow and state management of the game while validating inputs and configurations.
-- **Components**: Represents game entities like `Board` and `Card`.
+- **[Components](/engine/src/components)**: Represents game entities like Board and Card, crucial for defining the game's structure and dynamics.
 - **Engine**: Manages game flow and logic (`Engine` and `EngineImpl`).
 - **Loader**: Loads game data from XML configurations.
 - **Validators**: Validates game configurations and player inputs.
 
-### 2. Admin Module
-Provides functionalities for the administrator.
+### [2. Admin Module](/playerclient)
+The Admin Module provides the tools necessary for administrators to configure and oversee game sessions.
 - **AdminClientMain**: Entry point for the admin client application.
 - **FileUpload**: Handles the upload of game configurations.
 - **WatchLiveGame**: Allows the admin to watch live games as an observer.
 
-### 3. Player Module
+### [3. Player Module](/adminclient)
 Provides functionalities for players to register, join, and participate in games.
 - **PlayerClientMain**: Entry point for the player client application.
 - **RegisterToGame**: Manages player registration for games.
 - **PlayTurn**: Manages the player's turn during the game.
 
-### 4. Common Module
+### [4. Common Module](/common)
 Contains shared utilities and UI components.
 - **UI**: Includes `BoardPrinter` and `CardToString` for displaying game information.
 - **Utils**: Provides common utility functions.
 - **CallConfig**: Manages HTTP communication between clients and the server using OkHttp.
 
-### 5. Webapp Module
+### [5. Webapp Module](/webbapp)
 Handles web-related functionalities and serves as the interface between clients and the engine core.
 - **FileUploadServlet**: Manages file upload requests.
 - **LiveGamesServlet**: Provides live game status.
