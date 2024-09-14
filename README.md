@@ -1,6 +1,6 @@
 # CodeNames Project
 
-The CodeNames project is a client-server based game implemented using Java and Tomcat. It allows multiple users to participate in different game sessions with varying configurations and roles.
+The CodeNames Project is a client-server-based game built using Java and Tomcat, designed to facilitate multiple users in participating in different game sessions of the popular board game "Codenames." The server, hosted on Apache Tomcat, manages game sessions, player registrations, and game states, while the admin and player clients interact with the server to upload game configurations, monitor game statuses, and participate in game play. The admin client allows for game configuration and monitoring, while the player client enables registration, game joining, and active participation. The project employs XML for game configuration and consists of several modules, including an engine module for game logic, admin and player modules for user interactions, a common module for shared utilities, and a webapp module for managing server-client communications.
 
 ## Technologies Used
 - **Apache Tomcat:** Version 10.0.11
