@@ -73,9 +73,9 @@ The Common Module contains shared utilities and components used across the appli
 - **[Utils](/common/src/utils)**: Provides common utility functions, simplifying tasks like data manipulation and error handling.
 - **[CallConfig](/common/src/callconfig)**:  Manages HTTP communication between clients and the server using [OkHttp](https://github.com/square/okhttp), ensuring seamless data exchange and interaction.
 
-### [5. Webapp Module](/webbapp)
+### [5. Webapp Module](/webapp)
 The Webapp Module handles web-related functionalities, acting as the bridge between clients and the engine core. It processes client requests and updates the game state through server-side operations.
-- **[FileUploadServlet](/webbapp/src/adminServlets/FileUploadServlet.java)**: Manages file upload requests from clients, allowing them to upload game configurations to the server.
-- **[LiveGamesServlet](/webbapp/src/adminServlets/LiveGamesServlet.java)**: Provides live game status, enabling clients to retrieve the current state and progress of games.
+- **[FileUploadServlet](/webapp/src/adminServlets/FileUploadServlet.java)**: Manages file upload requests from clients, allowing them to upload game configurations to the server.
+- **[LiveGamesServlet](/webapp/src/adminServlets/LiveGamesServlet.java)**: Provides live game status, enabling clients to retrieve the current state and progress of games.
 
-- **[PlayTurnServlet](/webbapp/src/playerServlets/PlayTurnServlet.java)**: Manages player turns during the game, processing actions sent from clients and updating the game state on the server.
+- **[PlayTurnServlet](/webapp/src/playerServlets/PlayTurnServlet.java)**: Manages player turns during the game, processing actions sent from clients and updating the game state on the server.
