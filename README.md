@@ -50,10 +50,10 @@ The server, built on Tomcat, follows a RESTful architecture to host the game eng
 
 ### [1. Engine Module](/engine)
 The Engine Module is the backbone of the CodeNames game, encompassing the core logic and rules that drive gameplay. It ensures the correct flow and state management of the game while validating inputs and configurations.
-- **[Components](/engine/src/components)**: Represents game entities like Board and Card, crucial for defining the game's structure and dynamics.
-- **Engine**: Manages game flow and logic (`Engine` and `EngineImpl`).
-- **Loader**: Loads game data from XML configurations.
-- **Validators**: Validates game configurations and player inputs.
+- **[Components](/engine/src/components)**: Represents game entities like [Board](/engine/src/components/board) and [Card](/engine/src/components/card), crucial for defining the game's structure and dynamics.
+- **[Engine](/engine/src/engine)**: Manages game flow and logic ([`Engine`](/engine/src/engine/Engine.java) and [`EngineImpl`](/engine/src/engine/EngineImpl.java)).
+- **[Loader](/engine/src/engine/data/loader)**: Loads game data from XML configurations.
+- **[Validators](/engine/src/engine/data/validators)**: Validates game configurations and player inputs.
 
 ### [2. Admin Module](/playerclient)
 The Admin Module provides the tools necessary for administrators to configure and oversee game sessions.
