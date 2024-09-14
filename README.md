@@ -55,13 +55,13 @@ The Engine Module is the backbone of the CodeNames game, encompassing the core l
 - **[Loader](/engine/src/engine/data/loader)**: Loads game data from XML configurations.
 - **[Validators](/engine/src/engine/data/validators)**: Validates game configurations and player inputs.
 
-### [2. Admin Module](/playerclient)
+### [2. Admin Module](/adminclient)
 The Admin Module provides the tools necessary for administrators to configure and oversee game sessions.
-- **AdminClientMain**: Entry point for the admin client application.
-- **FileUpload**: Handles the upload of game configurations.
-- **WatchLiveGame**: Allows the admin to watch live games as an observer.
+- **[AdminClientMain](/adminclient/src/AdminClientMain.java)**: Entry point for the admin client application, allowing the admin to interact with the game server.
+- **[FileUpload](/adminclient/src/FileUpload.java)**: Handles the upload of game configurations, enabling the admin to set up games with customized rules and parameters
+- **[WatchLiveGame](/adminclient/src/WatchLiveGame.java)**: Allows the admin to watch live games as an observer.
 
-### [3. Player Module](/adminclient)
+### [3. Player Module](/playerclient)
 Provides functionalities for players to register, join, and participate in games.
 - **PlayerClientMain**: Entry point for the player client application.
 - **RegisterToGame**: Manages player registration for games.
