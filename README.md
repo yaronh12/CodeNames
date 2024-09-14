@@ -68,10 +68,10 @@ The Player Module empowers players to engage with the game, from registration to
 - **[PlayTurn](/playerclient/src/PlayTurn.java)**: Manages the player's turn during the game, processing actions such as providing clues or guessing words.
 
 ### [4. Common Module](/common)
-Contains shared utilities and UI components.
-- **UI**: Includes `BoardPrinter` and `CardToString` for displaying game information.
-- **Utils**: Provides common utility functions.
-- **CallConfig**: Manages HTTP communication between clients and the server using OkHttp.
+The Common Module contains shared utilities and components used across the application, ensuring consistency and reusability in how game information is presented and client-server communication is handled.
+- **[UI](/common/src/ui)**: Includes ['BoardPrinter'](/common/src/ui/BoardPrinter.java) and ['CardToString'](/common/src/ui/BoardPrinter.java) for displaying game information, offering a standardized way to visualize the game state.
+- **[Utils](/common/src/utils)**: Provides common utility functions, simplifying tasks like data manipulation and error handling.
+- **[CallConfig](/common/src/callconfig)**:  Manages HTTP communication between clients and the server using [OkHttp](https://github.com/square/okhttp), ensuring seamless data exchange and interaction.
 
 ### [5. Webapp Module](/webbapp)
 Handles web-related functionalities and serves as the interface between clients and the engine core.
