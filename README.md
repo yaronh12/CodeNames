@@ -1,6 +1,4 @@
 # CodeNames Project
-
-## Overview
 The **CodeNames** project is a client-server-based multiplayer game implemented using Java and Tomcat. It allows multiple users to participate in various game sessions with different configurations and roles, including players and administrators.
 
 
